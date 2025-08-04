@@ -1,14 +1,21 @@
+import React from 'react';
 
-import { Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
+import Hero from './components/Hero';
 
 
-const App = () => {
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-    </Routes>
-  )
+    
+        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+        
+          <main>
+            <Hero />
+          
+          </main>
+          
+        </div>
+     
+  );
 }
 
-export default App
+export default App;
