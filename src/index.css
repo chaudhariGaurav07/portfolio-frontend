@@ -1,2 +1,226 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modern 3D Portfolio Design System */
+
+@layer base {
+  :root {
+    /* Core Background & Text */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    /* Cards & Surfaces */
+    --card: 240 10% 5.9%;
+    --card-foreground: 0 0% 98%;
+
+    /* Interactive Elements */
+    --popover: 240 10% 5.9%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Brand Colors - Neon Cyan/Purple Theme */
+    --primary: 193 100% 58%;
+    --primary-foreground: 240 10% 3.9%;
+    --primary-glow: 193 100% 70%;
+
+    --secondary: 271 100% 65%;
+    --secondary-foreground: 0 0% 98%;
+    --secondary-glow: 271 100% 75%;
+
+    /* Neutral Surfaces */
+    --muted: 240 10% 8%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 193 100% 58%;
+    --accent-foreground: 240 10% 3.9%;
+
+    /* Status Colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+
+    --warning: 48 96% 53%;
+    --warning-foreground: 0 0% 3%;
+
+    /* Borders & Inputs */
+    --border: 240 10% 15%;
+    --input: 240 10% 12%;
+    --ring: 193 100% 58%;
+
+    --radius: 0.75rem;
+
+    /* 3D Effects */
+    --shadow-color: 193 100% 58%;
+    --shadow-glow: 271 100% 65%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(193 100% 58%), hsl(271 100% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(271 100% 65%), hsl(193 100% 58%));
+    --gradient-background: linear-gradient(135deg, hsl(240 10% 3.9%), hsl(240 15% 6%));
+    --gradient-card: linear-gradient(135deg, hsl(240 10% 5.9%), hsl(240 15% 8%));
+    
+    /* 3D Shadows */
+    --shadow-3d: 0 10px 30px -5px hsl(var(--shadow-color) / 0.3), 
+                 0 4px 15px -2px hsl(var(--shadow-glow) / 0.2);
+    --shadow-3d-hover: 0 20px 50px -10px hsl(var(--shadow-color) / 0.4), 
+                       0 8px 25px -5px hsl(var(--shadow-glow) / 0.3);
+    --shadow-inner: inset 0 2px 4px 0 hsl(240 10% 20%);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 193 100% 58%;
+    --accent-foreground: 0 0% 98%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --gradient-background: linear-gradient(135deg, hsl(0 0% 100%), hsl(240 5% 96%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(240 5% 98%));
+    --shadow-inner: inset 0 2px 4px 0 hsl(240 5% 85%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+    background: var(--gradient-background);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* 3D Card Effects */
+  .card-3d {
+    @apply relative overflow-hidden rounded-lg border border-border/50;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-3d);
+    transition: var(--transition-smooth);
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  }
+
+  .card-3d:hover {
+    box-shadow: var(--shadow-3d-hover);
+    transform: perspective(1000px) rotateX(-2deg) rotateY(2deg) translateY(-5px);
+  }
+
+  .card-3d::before {
+    content: "";
+    @apply absolute inset-0 opacity-0 pointer-events-none;
+    background: var(--gradient-primary);
+    transition: var(--transition-smooth);
+  }
+
+  .card-3d:hover::before {
+    @apply opacity-10;
+  }
+
+  /* Floating Animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(-5px) rotate(-1deg); }
+  }
+
+  /* Pulse Glow */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse-glow {
+    from {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+    }
+    to {
+      box-shadow: 0 0 40px hsl(var(--primary) / 0.8), 0 0 60px hsl(var(--secondary) / 0.4);
+    }
+  }
+
+  /* Typing Animation */
+  .typing::after {
+    content: "|";
+    @apply animate-pulse;
+  }
+
+  /* 3D Button */
+  .btn-3d {
+    @apply relative overflow-hidden rounded-lg px-6 py-3 font-medium;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-3d);
+    transition: var(--transition-bounce);
+    transform: perspective(1000px) rotateX(0deg);
+  }
+
+  .btn-3d:hover {
+    box-shadow: var(--shadow-3d-hover);
+    transform: perspective(1000px) rotateX(-5deg) translateY(-2px);
+  }
+
+  .btn-3d:active {
+    transform: perspective(1000px) rotateX(2deg) translateY(1px);
+    box-shadow: var(--shadow-3d);
+  }
+
+  /* Tech Icon 3D */
+  .tech-icon {
+    @apply relative p-4 rounded-xl border border-border/30;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-3d);
+    transition: var(--transition-bounce);
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  }
+
+  .tech-icon:hover {
+    box-shadow: var(--shadow-3d-hover);
+    transform: perspective(1000px) rotateX(-10deg) rotateY(10deg) translateY(-10px);
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply backdrop-blur-xl border border-white/10;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-3d);
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Section Spacing */
+  .section-padding {
+    @apply py-20 px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto;
+  }
+}
