@@ -1,8 +1,36 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Github, Linkedin, Mail, Download, User } from 'lucide-react';
+import { ChevronDown, Github, Linkedin, Mail, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useHref } from 'react-router-dom';
+import {
+  SiReact,
+  SiTypescript,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiExpress,
+  SiMongodb,
+  SiPostgresql,
+  SiAmazon,
+  SiVercel,
+  SiGit,
+  SiGithub,
+} from 'react-icons/si';
+
+const techIcons = [
+  SiReact,
+  SiTypescript,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiExpress,
+  SiMongodb,
+  SiPostgresql,
+  SiAmazon,
+  SiVercel,
+  SiGit,
+  SiGithub,
+];
 
 const roles = [
   'Full Stack Developer',
@@ -19,7 +47,6 @@ export default function Hero() {
   useEffect(() => {
     const role = roles[currentRole];
     let charIndex = 0;
-    
     const typeInterval = setInterval(() => {
       if (isTyping) {
         if (charIndex < role.length) {
@@ -35,7 +62,6 @@ export default function Hero() {
         }
       }
     }, 100);
-
     return () => clearInterval(typeInterval);
   }, [currentRole, isTyping]);
 
@@ -45,43 +71,51 @@ export default function Hero() {
 
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20" />
-        
-        {/* Floating Particles */}
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-primary/30 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            transition={{
-              duration: Math.random() * 10 + 20,
-              repeat: Infinity,
-              repeatType: 'reverse',
-            }}
-          />
-        ))}
+      {/* Animated Icon Background */}
+      <div className="absolute inset-0 overflow-hidden z-0">
+        {techIcons.map((Icon, index) => {
+          const duration = 8 + Math.random() * 4;
+          const delay = Math.random() * 2;
+          const size = 24 + Math.random() * 24;
+          const xStart = Math.random() * 100;
+          const xEnd = Math.random() * 100;
+
+          return (
+            <motion.div
+              key={index}
+              className="absolute text-primary/20"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${xStart}%`,
+                fontSize: `${size}px`,
+              }}
+              animate={{
+                y: [0, -200],
+                x: [`${xStart}%`, `${xEnd}%`],
+                opacity: [0.2, 1, 0.2],
+                rotate: [0, 360],
+              }}
+              transition={{
+                duration,
+                delay,
+                repeat: Infinity,
+                repeatType: 'reverse',
+                ease: 'easeInOut',
+              }}
+            >
+              <Icon />
+            </motion.div>
+          );
+        })}
       </div>
 
+      {/* Main Content */}
       <div className="container-custom px-4 text-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Developer Icon */}
+        <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
             className="mb-8 flex justify-center"
           >
             <div className="w-24 h-24 bg-gradient-primary rounded-full flex items-center justify-center shadow-3d">
@@ -89,7 +123,6 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Name */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,7 +133,6 @@ export default function Hero() {
             <span className="text-foreground">Chaudhari</span>
           </motion.h1>
 
-          {/* Typing Animation */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -113,19 +145,15 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          {/* Bio */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
             className="text-lg text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed italic"
           >
-            Passionate about creating digital experiences that make a difference. 
-            I specialize in building scalable web applications with modern technologies 
-            and contributing to open-source projects that help developers worldwide.
+            Passionate about creating digital experiences that make a difference. I specialize in building scalable web applications with modern technologies and contributing to open-source projects that help developers worldwide.
           </motion.p>
 
-          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -139,7 +167,7 @@ export default function Hero() {
             >
               View My Work
             </Button>
-            
+
             <Button
               variant="outline"
               size="lg"
@@ -151,7 +179,6 @@ export default function Hero() {
             </Button>
           </motion.div>
 
-          {/* Social Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -178,7 +205,6 @@ export default function Hero() {
             ))}
           </motion.div>
 
-          {/* Scroll Indicator */}
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

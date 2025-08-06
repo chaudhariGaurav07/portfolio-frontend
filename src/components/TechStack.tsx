@@ -8,13 +8,13 @@ import {
   SiNodedotjs,
   SiExpress,
   SiMongodb,
-  SiPostgresql,
   SiAmazon,
   SiVercel,
   SiGit,
   SiGithub,
   SiReactivex,
   SiFramer,
+  SiFirebase,
 } from "react-icons/si";
 
 const techCategories = [
@@ -58,7 +58,7 @@ const techCategories = [
         proficiency: 85,
       },
       {
-        name: "MongoDB",
+        name: "Python",
         icon: SiMongodb,
         color: "text-green-600",
         proficiency: 80,
@@ -81,8 +81,8 @@ const techCategories = [
         proficiency: 88,
       },
       {
-        name: "PostgreSQL",
-        icon: SiPostgresql,
+        name: "Firebase",
+        icon: SiFirebase,
         color: "text-blue-700",
         proficiency: 82,
       },
@@ -202,11 +202,8 @@ export default function TechStack() {
                       scale: 1,
                     }}
                     transition={{
-                      duration: 2,
-                      delay: index * 0.1,
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                      ease: "easeInOut",
+                       duration: 0.5, // smoother animation
+                      ease: "linear",
                     }}
                     whileHover={{
                       scale: 1.3,
