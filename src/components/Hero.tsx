@@ -172,7 +172,7 @@ export default function Hero() {
               variant="outline"
               size="lg"
               className="text-lg px-8 py-4 border-primary/30 hover:border-primary bg-transparent"
-              onClick={() => window.open('https://your-cv-link.com', '_blank')}
+              onClick={() => window.open('https://drive.google.com/file/d/1B9jn6_-sWrIQ4-_jnNzUA34QfyA-ewZA/view', '_blank')}
             >
               <Download className="w-5 h-5 mr-2" />
               Download CV

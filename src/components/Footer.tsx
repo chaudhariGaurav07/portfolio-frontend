@@ -1,30 +1,30 @@
-import { motion } from 'framer-motion';
-import { Heart, Code2, Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { motion } from "framer-motion";
+import { Heart, Code2, Github, Linkedin, Mail, ArrowUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const socialLinks = [
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-  { icon: Mail, href: 'mailto:gaurav@example.com', label: 'Email' },
+  { icon: Github, href: "https://github.com/chaudhariGaurav07", label: "GitHub" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/gaurav-chaudhari-b20176227/", label: "LinkedIn" },
+  { icon: Mail, href: "mailto:gauravchaudhari7717@example.com", label: "Email" },
 ];
 
 const quickLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Blog', href: '#blog' },
-  { label: 'Contact', href: '#contact' },
+  { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects", href: "#projects" },
+  { label: "Blog", href: "#blog" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -49,8 +49,9 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Full Stack Developer passionate about creating digital experiences 
-              that make a difference. Building the future, one line of code at a time.
+              Full Stack Developer with a passion for delivering high-impact
+              digital experiences through clean, efficient code and thoughtful
+              design.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -78,7 +79,9 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-foreground">Quick Links</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              Quick Links
+            </h3>
             <nav className="flex flex-col space-y-2">
               {quickLinks.map((link) => (
                 <motion.button
@@ -101,9 +104,17 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-foreground">Built With</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              Built With
+            </h3>
             <div className="flex flex-wrap gap-2">
-              {['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'].map((tech) => (
+              {[
+                "React",
+                "TypeScript",
+                "Tailwind CSS",
+                "Framer Motion",
+                "Vite",
+              ].map((tech) => (
                 <span
                   key={tech}
                   className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20"
@@ -119,39 +130,28 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0"
-        >
-          <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-            <span>Made with</span>
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            >
-              <Heart className="w-4 h-4 text-red-500 fill-current" />
-            </motion.div>
-            <span>by Gaurav Chaudhari</span>
-          </div>
+       <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, delay: 0.3 }}
+  className="pt-8 border-t border-border/50 flex justify-center"
+>
+  <div className="flex items-center space-x-4">
+    <p className="text-sm text-muted-foreground">
+      © {new Date().getFullYear()} All rights reserved.
+    </p>
 
-          <div className="flex items-center space-x-4">
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} All rights reserved.
-            </p>
-            
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={scrollToTop}
-              className="w-10 h-10 bg-muted/50 hover:bg-primary border border-border/50 hover:border-primary text-muted-foreground hover:text-primary-foreground transition-all duration-300"
-            >
-              <ArrowUp className="w-4 h-4" />
-            </Button>
-          </div>
-        </motion.div>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={scrollToTop}
+      className="w-10 h-10 bg-muted/50 hover:bg-primary border border-border/50 hover:border-primary text-muted-foreground hover:text-primary-foreground transition-all duration-300"
+    >
+      <ArrowUp className="w-4 h-4" />
+    </Button>
+  </div>
+</motion.div>
       </div>
     </footer>
   );
