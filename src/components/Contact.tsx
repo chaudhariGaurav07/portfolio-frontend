@@ -1,42 +1,58 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Mail, MapPin, Phone, CheckCircle, AlertCircle } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { contactAPI } from '@/lib/api';
-import { ContactForm as ContactFormType } from '@/types';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Send,
+  Mail,
+  MapPin,
+  Phone,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { contactAPI } from "@/lib/api";
+import { ContactForm as ContactFormType } from "@/types";
 
 const contactSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email address'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
 const contactInfo = [
   {
     icon: Mail,
-    label: 'Email',
-    value: 'gaurav@example.com',
-    href: 'mailto:gaurav@example.com',
+    label: "Email",
+    value: "gauravchaudhari7717@example.com",
+    href: "mailto:gauravchaudhari7717@example.com",
   },
   {
     icon: MapPin,
-    label: 'Location',
-    value: 'India',
+    label: "Location",
+    value: "India",
     href: null,
   },
   {
     icon: Phone,
-    label: 'Phone',
-    value: '+91 XXX XXX XXXX',
-    href: 'tel:+91XXXXXXXXXX',
+    label: "Phone",
+    value: "+91 866 844 9187",
+    href: "tel:+918668449187",
   },
+];
+
+const platforms = [
+  { name: "GitHub", url: "https://github.com/chaudhariGaurav07" },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/gaurav-chaudhari-b20176227/",
+  },
+  { name: "Twitter", url: "https://x.com/GauravChau364" }, // update with your real handle
 ];
 
 export default function Contact() {
@@ -54,15 +70,15 @@ export default function Contact() {
 
   const onSubmit = async (data: ContactFormType) => {
     setIsSubmitting(true);
-    
+
     try {
       const result = await contactAPI.send(data);
-      
+
       if (result.success) {
         toast({
-          title: 'Message Sent!',
+          title: "Message Sent!",
           description: result.message,
-          variant: 'default',
+          variant: "default",
         });
         reset();
       } else {
@@ -70,9 +86,9 @@ export default function Contact() {
       }
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to send message. Please try again.',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -109,8 +125,9 @@ export default function Contact() {
             <div>
               <h3 className="text-2xl font-bold mb-4">Let's Connect</h3>
               <p className="text-muted-foreground leading-relaxed">
-                I'm always open to discussing new opportunities, interesting projects,
-                or just having a conversation about technology and development.
+                I'm always open to discussing new opportunities, interesting
+                projects, or just having a conversation about technology and
+                development.
               </p>
             </div>
 
@@ -129,7 +146,9 @@ export default function Contact() {
                       <info.icon className="w-6 h-6 text-primary-foreground" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">{info.label}</h4>
+                      <h4 className="font-semibold text-foreground">
+                        {info.label}
+                      </h4>
                       {info.href ? (
                         <a
                           href={info.href}
@@ -156,17 +175,17 @@ export default function Contact() {
             >
               <h4 className="font-semibold mb-4">Follow Me</h4>
               <div className="flex space-x-4">
-                {['GitHub', 'LinkedIn', 'Twitter'].map((platform) => (
+                {platforms.map(({ name, url }) => (
                   <motion.a
-                    key={platform}
-                    href={`https://${platform.toLowerCase()}.com`}
+                    key={name}
+                    href={url}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     whileTap={{ scale: 0.9 }}
                     className="px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 text-sm font-medium"
                   >
-                    {platform}
+                    {name}
                   </motion.a>
                 ))}
               </div>
@@ -180,7 +199,10 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <form onSubmit={handleSubmit(onSubmit)} className="card-3d p-8 space-y-6">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="card-3d p-8 space-y-6"
+            >
               <h3 className="text-2xl font-bold mb-6">Send Message</h3>
 
               {/* Name Field */}
@@ -190,7 +212,7 @@ export default function Contact() {
                 </Label>
                 <Input
                   id="name"
-                  {...register('name')}
+                  {...register("name")}
                   placeholder="Your full name"
                   className="bg-input/50 border-border/50 focus:border-primary"
                 />
@@ -210,7 +232,7 @@ export default function Contact() {
                 <Input
                   id="email"
                   type="email"
-                  {...register('email')}
+                  {...register("email")}
                   placeholder="your.email@example.com"
                   className="bg-input/50 border-border/50 focus:border-primary"
                 />
@@ -229,7 +251,7 @@ export default function Contact() {
                 </Label>
                 <Textarea
                   id="message"
-                  {...register('message')}
+                  {...register("message")}
                   placeholder="Tell me about your project or just say hello..."
                   rows={5}
                   className="bg-input/50 border-border/50 focus:border-primary resize-none"
