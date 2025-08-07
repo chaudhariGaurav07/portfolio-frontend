@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { Project, BlogPost, ContactForm, AIMessage } from '@/types';
+import { Project, BlogPost, ContactForm, AIResponse } from '@/types';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'https://portfolio-w34d.onrender.com/api/v1/',
-  timeout: 10000,
+  timeout: 50000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -82,12 +82,12 @@ export const contactAPI = {
 };
 
 export const aiAPI = {
-  ask: async (question: string): Promise<string> => {
+  ask: async (question: string): Promise<AIResponse> => {
     try {
       const { data } = await api.post('/ai/ask', { question });
-      return data.answer;
-    } catch {
-     throw new Error('AI response failed');
+      return data; // 
+    } catch (error) {
+      throw new Error("Failed ai responce")
     }
   },
 };

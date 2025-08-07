@@ -39,7 +39,7 @@ export interface AIMessage {
   _id: string;
   content: string;
   role: 'user' | 'assistant';
-  timestamp: string; // Use ISO string instead of Date object for API
+  timestamp: string; 
 }
 
 export interface Experience {
@@ -58,4 +58,13 @@ export interface TechStack {
   icon: string;
   category: 'frontend' | 'backend' | 'database' | 'tools' | 'cloud';
   proficiency: number; // between 1 to 100
+}
+
+export interface AIResponse {
+  statusCode: number;
+  data: {
+    answer: string;
+  };
+  message: string;
+  success: boolean;
 }
