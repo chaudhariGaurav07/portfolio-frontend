@@ -1,33 +1,57 @@
-import { motion } from 'framer-motion';
-import { Calendar, MapPin, Building, Briefcase } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Calendar, MapPin, Building } from "lucide-react";
 
 const experiences = [
   {
-    id: '1',
-    company: 'GirlScript Summer of Code.',
-    position: 'Contributor + Campus Ambassador',
-    duration: 'Jul 2025 - Present',
-    location: 'Remote',
-    description: 'Contributing to open-source projects under GSSoC by building scalable full-stack features, fixing bugs, and improving documentation. As a Campus Ambassador, actively promoted the program in my college, organized info sessions, and helped onboard new participants. Collaborated with diverse developer teams, participated in regular code reviews, and learned best practices in Git, GitHub, and CI/CD workflows.',
-    technologies: ['React', 'Node.js', 'TypeScript', 'MongoDB', 'Express.js', 'Git', 'GitHub'],
+    id: "1",
+    company: "GirlScript Summer of Code.",
+    position: "Contributor + Campus Ambassador",
+    duration: "Jul 2025 - Present",
+    location: "Remote",
+    logo: "/assets/gssoc.png",
+    description:
+      "Contributing to open-source projects under GSSoC by building scalable full-stack features, fixing bugs, and improving documentation. As a Campus Ambassador, actively promoted the program in my college, organized info sessions, and helped onboard new participants. Collaborated with diverse developer teams, participated in regular code reviews, and learned best practices in Git, GitHub, and CI/CD workflows.",
+    technologies: [
+      "React",
+      "Node.js",
+      "TypeScript",
+      "MongoDB",
+      "Express.js",
+      "Git",
+      "GitHub",
+    ],
   },
   {
-    id: '2',
-    company: 'Akatsukin Coding Club',
-    position: 'Technical Team Member',
-    duration: 'Oct 2024 - Present',
-    location: 'Rc Patel Institute of Technology, Shirpur',
-    description: 'Actively contributed to the club by developing and maintaining internal tools and event-related websites. Took part in event planning, technical setup, and UI/UX design. Mentored students by conducting hands-on workshops, including a beginner-friendly session on React.js. Collaborated with cross-functional teams for seamless event execution and club growth.',
-    technologies: ['React', 'Express.js', 'MongoDB', 'Tailwind CSS', 'Node.js', 'Git', 'Github' , 'React-Native', 'Expo'],
+    id: "2",
+    company: "Akatsukin Coding Club",
+    position: "Technical Team Member",
+    duration: "Oct 2024 - Present",
+    logo: "/assets/akatsuki.png",
+    location: "Rc Patel Institute of Technology, Shirpur",
+    description:
+      "Actively contributed to the club by developing and maintaining internal tools and event-related websites. Took part in event planning, technical setup, and UI/UX design. Mentored students by conducting hands-on workshops, including a beginner-friendly session on React.js. Collaborated with cross-functional teams for seamless event execution and club growth.",
+    technologies: [
+      "React",
+      "Express.js",
+      "MongoDB",
+      "Tailwind CSS",
+      "Node.js",
+      "Git",
+      "Github",
+      "React-Native",
+      "Expo",
+    ],
   },
   {
-    id: '3',
-    company: 'R3 System India Private Limited',
-    position: 'Data Analyst',
-    duration: 'Jun 2023 - July 2023',
-    location: 'New York, NY',
-    description: 'Worked as a Data Analyst where I learned and applied Power BI to build interactive dashboards and visual reports for event insights and club performance. Collected, cleaned, and analyzed datasets to extract meaningful trends, helping the team make data-driven decisions for event planning and outreach. Collaborated with design and tech teams to integrate data visualizations into internal tools.',
-    technologies: ['Power BI', 'Excel', 'DAX', 'Data Visualization', 'Figma'],
+    id: "3",
+    company: "R3 System India Private Limited",
+    position: "Data Analyst",
+    duration: "Jun 2023 - July 2023",
+    logo: "/assets/r3sys.png",
+    location: "New York, NY",
+    description:
+      "Worked as a Data Analyst where I learned and applied Power BI to build interactive dashboards and visual reports for event insights and club performance. Collected, cleaned, and analyzed datasets to extract meaningful trends, helping the team make data-driven decisions for event planning and outreach. Collaborated with design and tech teams to integrate data visualizations into internal tools.",
+    technologies: ["Power BI", "Excel", "DAX", "Data Visualization", "Figma"],
   },
 ];
 
@@ -46,7 +70,8 @@ export default function Experience() {
             <span className="gradient-text">Professional Experience</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            My journey through different roles and companies, building scalable solutions
+            My journey through different roles and companies, building scalable
+            solutions
           </p>
         </motion.div>
 
@@ -63,7 +88,7 @@ export default function Experience() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
                 className={`relative flex items-center ${
-                  index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 } flex-col md:space-x-8`}
               >
                 {/* Timeline Dot */}
@@ -72,9 +97,16 @@ export default function Experience() {
                 </div>
 
                 {/* Content */}
-                <div className={`w-full md:w-1/2 ml-12 md:ml-0 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
+                <div
+                  className={`w-full md:w-1/2 ml-12 md:ml-0 ${
+                    index % 2 === 0 ? "md:pr-8" : "md:pl-8"
+                  }`}
+                >
                   <motion.div
-                    whileHover={{ scale: 1.02, rotateY: index % 2 === 0 ? 2 : -2 }}
+                    whileHover={{
+                      scale: 1.02,
+                      rotateY: index % 2 === 0 ? 2 : -2,
+                    }}
                     className="card-3d p-6 group cursor-pointer"
                   >
                     {/* Company & Position */}
@@ -88,8 +120,12 @@ export default function Experience() {
                           <span className="font-medium">{exp.company}</span>
                         </div>
                       </div>
-                      <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Briefcase className="w-6 h-6 text-primary-foreground" />
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <img
+                          src={exp.logo}
+                          alt={`${exp.company} logo`}
+                          className="w-12 h-12 object-contain"
+                        />
                       </div>
                     </div>
 
@@ -112,7 +148,9 @@ export default function Experience() {
 
                     {/* Technologies */}
                     <div className="space-y-2">
-                      <h4 className="text-sm font-semibold text-foreground">Key Technologies:</h4>
+                      <h4 className="text-sm font-semibold text-foreground">
+                        Key Technologies:
+                      </h4>
                       <div className="flex flex-wrap gap-2">
                         {exp.technologies.map((tech) => (
                           <motion.span
