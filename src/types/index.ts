@@ -3,10 +3,10 @@ export interface Project {
   _id: string; 
   title: string;
   description: string;
-  image: string;
+  imageUrl: string;       // changed from image
   techStack: string[];
-  githubUrl: string;
-  liveUrl: string;
+  githubLink: string;     // changed from githubUrl
+  liveDemo: string;       // changed from liveUrl
   featured?: boolean;
   createdAt?: string;
   updatedAt?: string;

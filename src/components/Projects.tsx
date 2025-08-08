@@ -132,7 +132,7 @@ export default function Projects() {
                   {/* Project Image */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={project.image}
+                      src={project.imageUrl}
                       alt={project.title}
                       className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                     />
@@ -149,7 +149,7 @@ export default function Projects() {
                     {/* Overlay Links */}
                     <div className="absolute inset-0 flex items-center justify-center space-x-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <motion.a
-                        href={project.githubUrl}
+                        href={project.githubLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.1 }}
@@ -159,7 +159,7 @@ export default function Projects() {
                         <Github className="w-5 h-5" />
                       </motion.a>
                       <motion.a
-                        href={project.liveUrl}
+                        href={project.liveDemo}
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.1 }}
@@ -203,7 +203,7 @@ export default function Projects() {
                           className="flex-1 border-primary/30 hover:border-primary bg-transparent text-xs"
                         >
                           <a
-                            href={project.githubUrl}
+                            href={project.githubLink}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -217,7 +217,7 @@ export default function Projects() {
                           className="flex-1 btn-3d text-xs"
                         >
                           <a
-                            href={project.liveUrl}
+                            href={project.liveDemo}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
