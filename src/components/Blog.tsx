@@ -1,10 +1,16 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Calendar, User, Tag, X, ExternalLink } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
-import { blogAPI } from '@/lib/api';
-import { BlogPost } from '@/types';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Clock, Calendar, User, Tag, X, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { blogAPI } from "@/lib/api";
+import { BlogPost } from "@/types";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -13,27 +19,26 @@ export default function Blog() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-  const fetchBlogs = async () => {
-    try {
-      const res = await blogAPI.getAll();
-      console.log("Fetched blogs:", res);
+    const fetchBlogs = async () => {
+      try {
+        const res = await blogAPI.getAll();
+        console.log("Fetched blogs:", res);
 
-      const mappedBlogs = res.map((item: any) => ({
-        ...item,
-        id: item._id,
-      }));
+        const mappedBlogs = res.map((item: any) => ({
+          ...item,
+          id: item._id,
+        }));
 
-      setBlogs(mappedBlogs);
-    } catch (error) {
-      console.error('Failed to fetch blogs:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setBlogs(mappedBlogs);
+      } catch (error) {
+        console.error("Failed to fetch blogs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchBlogs();
-}, []);
-
+    fetchBlogs();
+  }, []);
 
   const openBlog = async (blogId: string) => {
     try {
@@ -41,7 +46,7 @@ export default function Blog() {
       setSelectedBlog(blog);
       setIsModalOpen(true);
     } catch (error) {
-      console.error('Failed to fetch blog:', error);
+      console.error("Failed to fetch blog:", error);
     }
   };
 
@@ -83,83 +88,90 @@ export default function Blog() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog, index) => (
-              <motion.article
-                key={blog._id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="group cursor-pointer"
-                onClick={() => openBlog(blog._id)}
-              >
-                <div className="card-3d overflow-hidden h-full flex flex-col">
-                  {/* Blog Header */}
-                  <div className="p-6 flex-1">
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {blog.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium border border-primary/20"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                      {blog.tags.length > 3 && (
-                        <span className="px-2 py-1 bg-muted text-muted-foreground rounded text-xs">
-                          +{blog.tags.length - 3} more
-                        </span>
-                      )}
-                    </div>
+           {blogs.map((blog, index) => (
+  <motion.a
+    key={blog._id}
+    href={blog.externalLink}
+    target="_blank"
+    rel="noopener noreferrer"
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay: index * 0.1 }}
+    whileHover={{ y: -10 }}
+    className="group cursor-pointer block"
+  >
+    <div className="card-3d overflow-hidden h-full flex flex-col border border-border rounded-lg shadow-lg bg-background relative">
+      {/* Cover Image */}
+      {blog.image && (
+        <img
+          src={blog.image}
+          alt={blog.title}
+          className="w-full h-48 object-cover"
+        />
+      )}
 
-                    {/* Title */}
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2">
-                      {blog.title}
-                    </h3>
+      {/* Blog Header */}
+      <div className="p-6 flex-1">
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {blog.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium border border-primary/20"
+            >
+              #{tag}
+            </span>
+          ))}
+          {blog.tags.length > 3 && (
+            <span className="px-2 py-1 bg-muted text-muted-foreground rounded text-xs">
+              +{blog.tags.length - 3} more
+            </span>
+          )}
+        </div>
 
-                    {/* Excerpt */}
-                    <p className="text-muted-foreground mb-4 text-sm leading-relaxed line-clamp-3">
-                      {blog.excerpt}
-                    </p>
+        {/* Title */}
+        <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2">
+          {blog.title}
+        </h3>
 
-                    {/* Meta Info */}
-                    <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1">
-                          <User className="w-3 h-3" />
-                          <span>{blog.author}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Calendar className="w-3 h-3" />
-                          <span>{new Date(blog.publishedAt).toLocaleDateString()}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Clock className="w-3 h-3" />
-                        <span>{blog.readTime} min read</span>
-                      </div>
-                    </div>
-                  </div>
+        {/* Excerpt */}
+        <p className="text-muted-foreground mb-4 text-sm leading-relaxed line-clamp-3">
+          {blog.excerpt}
+        </p>
 
-                  {/* Read More Button */}
-                  <div className="p-6 pt-0">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full border-primary/30 hover:border-primary bg-transparent group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
-                    >
-                      Read More
-                      <ExternalLink className="w-3 h-3 ml-2" />
-                    </Button>
-                  </div>
+        {/* Meta Info */}
+        <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <User className="w-3 h-3" />
+              <span>{blog.author}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Calendar className="w-3 h-3" />
+              <span>
+                {new Date(blog.publishedAt).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Clock className="w-3 h-3" />
+            <span>{blog.readTime} min read</span>
+          </div>
+        </div>
+      </div>
 
-                  {/* Hover Effect */}
-                  <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none" />
-                </div>
-              </motion.article>
-            ))}
+      {/* Read More */}
+      <div className="p-6 pt-0 flex items-center justify-center gap-2 text-primary font-medium">
+        Read More <ExternalLink className="w-4 h-4" />
+      </div>
+
+      {/* Hover Effect */}
+      <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none" />
+    </div>
+  </motion.a>
+))}
+
           </div>
 
           {/* View All Blogs Button */}
@@ -192,7 +204,11 @@ export default function Blog() {
                     {selectedBlog.title}
                   </DialogTitle>
                   <DialogClose asChild>
-                    <Button variant="ghost" size="icon" className="flex-shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="flex-shrink-0"
+                    >
                       <X className="w-4 h-4" />
                     </Button>
                   </DialogClose>
@@ -206,7 +222,9 @@ export default function Blog() {
                   </div>
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-4 h-4" />
-                    <span>{new Date(selectedBlog.publishedAt).toLocaleDateString()}</span>
+                    <span>
+                      {new Date(selectedBlog.publishedAt).toLocaleDateString()}
+                    </span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Clock className="w-4 h-4" />

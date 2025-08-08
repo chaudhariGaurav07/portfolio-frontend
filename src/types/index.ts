@@ -23,9 +23,10 @@ export interface BlogPost {
   publishedAt: string; // ISO string (e.g., "2025-08-05T12:00:00Z")
   readTime: number;
   author: string;
-  coverImage?: string; 
+  image?: string; 
   createdAt?: string;
   updatedAt?: string;
+  externalLink:string;
 }
 
 
