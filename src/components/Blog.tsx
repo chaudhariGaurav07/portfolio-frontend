@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Calendar, User, Tag, X, ExternalLink } from "lucide-react";
+import { Clock, Calendar, User, Tag, X, ExternalLink, PenTool, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -182,13 +182,14 @@ export default function Blog() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-center mt-12"
           >
-            <Button
-              variant="outline"
-              size="lg"
-              className="btn-3d border-primary/30 hover:border-primary bg-transparent"
-            >
-              View All Blog Posts
-            </Button>
+           <Button
+  variant="outline"
+  size="lg"
+  className="btn-3d border-primary/30 hover:border-primary bg-transparent"
+  onClick={() => window.open('https://medium.com/@gauravchaudhari_', '_blank')}
+>
+  View All Blog Posts <Newspaper />
+</Button>
           </motion.div>
         </div>
       </section>

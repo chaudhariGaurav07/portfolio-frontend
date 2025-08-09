@@ -255,13 +255,14 @@ export default function Projects() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-center mt-12"
         >
-          <Button
-            variant="outline"
-            size="lg"
-            className="btn-3d border-primary/30 hover:border-primary bg-transparent"
-          >
-            View All Projects on GitHub
-          </Button>
+         <Button
+  variant="outline"
+  size="lg"
+  className="btn-3d border-primary/30 hover:border-primary bg-transparent"
+  onClick={() => window.open('https://github.com/chaudhariGaurav07', '_blank')}
+>
+  View All Projects on <Github />
+</Button>
         </motion.div>
       </div>
     </section>

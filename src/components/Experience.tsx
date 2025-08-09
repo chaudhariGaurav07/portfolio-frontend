@@ -4,13 +4,13 @@ import { Calendar, MapPin, Building } from "lucide-react";
 const experiences = [
   {
     id: "1",
-    company: "GirlScript Summer of Code.",
+    company: "GirlScript Summer of Code",
     position: "Contributor + Campus Ambassador",
     duration: "Jul 2025 - Present",
     location: "Remote",
     logo: "/assets/gssoc.png",
     description:
-      "Contributing to open-source projects under GSSoC by building scalable full-stack features, fixing bugs, and improving documentation. As a Campus Ambassador, actively promoted the program in my college, organized info sessions, and helped onboard new participants. Collaborated with diverse developer teams, participated in regular code reviews, and learned best practices in Git, GitHub, and CI/CD workflows.",
+      "Built scalable full-stack features, fixed bugs, and improved documentation for open-source projects. Promoted GSSoC in college, organized info sessions, and onboarded participants. Collaborated in code reviews and gained expertise in Git, GitHub, and CI/CD workflows.",
     technologies: [
       "React",
       "Node.js",
@@ -27,9 +27,9 @@ const experiences = [
     position: "Technical Team Member",
     duration: "Oct 2024 - Present",
     logo: "/assets/akatsuki.png",
-    location: "Rc Patel Institute of Technology, Shirpur",
+    location: "RC Patel Institute of Technology, Shirpur",
     description:
-      "Actively contributed to the club by developing and maintaining internal tools and event-related websites. Took part in event planning, technical setup, and UI/UX design. Mentored students by conducting hands-on workshops, including a beginner-friendly session on React.js. Collaborated with cross-functional teams for seamless event execution and club growth.",
+      "Developed internal tools and event websites, handled technical setups, and contributed to UI/UX design. Conducted workshops, including React.js training, and collaborated across teams for smooth event execution.",
     technologies: [
       "React",
       "Express.js",
@@ -37,7 +37,7 @@ const experiences = [
       "Tailwind CSS",
       "Node.js",
       "Git",
-      "Github",
+      "GitHub",
       "React-Native",
       "Expo",
     ],
@@ -46,14 +46,15 @@ const experiences = [
     id: "3",
     company: "R3 System India Private Limited",
     position: "Data Analyst",
-    duration: "Jun 2023 - July 2023",
+    duration: "Jun 2023 - Jul 2023",
     logo: "/assets/r3sys.png",
-    location: "New York, NY",
+    location: "Nashik",
     description:
-      "Worked as a Data Analyst where I learned and applied Power BI to build interactive dashboards and visual reports for event insights and club performance. Collected, cleaned, and analyzed datasets to extract meaningful trends, helping the team make data-driven decisions for event planning and outreach. Collaborated with design and tech teams to integrate data visualizations into internal tools.",
+      "Created interactive dashboards and visual reports using Power BI for event and performance analysis. Collected, cleaned, and analyzed data to support decision-making and integrated insights into internal tools.",
     technologies: ["Power BI", "Excel", "DAX", "Data Visualization", "Figma"],
   },
 ];
+
 
 export default function Experience() {
   return (
