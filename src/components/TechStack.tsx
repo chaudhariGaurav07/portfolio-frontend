@@ -253,43 +253,45 @@ export default function TechStack() {
           </motion.div>
 
           {/* Category Labels */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-            {techCategories.map((category, index) => (
-              <motion.div
-                key={category.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 + 0.5 }}
-                className="text-center p-6 card-3d"
-              >
-                <h3 className="text-lg font-semibold mb-3 gradient-text">
-                  {category.title}
-                </h3>
-                <div className="space-y-2">
-                  {category.techs.map((tech) => (
-                    <div
-                      key={tech.name}
-                      className="flex items-center justify-between text-sm"
-                    >
-                      <span className="text-muted-foreground">{tech.name}</span>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-12 h-1 bg-muted rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-primary rounded-full transition-all duration-1000"
-                            style={{ width: `${tech.proficiency}%` }}
-                          />
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {tech.proficiency}%
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+  {techCategories.map((category, index) => (
+    <motion.div
+      key={category.title}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 + 0.5 }}
+      className="text-center p-6 card-3d"
+    >
+      <h3 className="text-lg font-semibold mb-3 gradient-text">
+        {category.title}
+      </h3>
+      <div className="space-y-2">
+        {category.techs.map((tech) => (
+          <div
+            key={tech.name}
+            className="flex items-center justify-between text-sm"
+          >
+            <span className="text-muted-foreground">{tech.name}</span>
+            <div className="flex items-center space-x-1">
+              <div className="w-12 h-1 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-primary rounded-full transition-all duration-1000"
+                  style={{ width: `${tech.proficiency}%` }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground">
+                {tech.proficiency}%
+              </span>
+            </div>
           </div>
+        ))}
+      </div>
+    </motion.div>
+  ))}
+</div>
+
+
         </div>
       </div>
     </section>

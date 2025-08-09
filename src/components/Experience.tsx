@@ -55,7 +55,6 @@ const experiences = [
   },
 ];
 
-
 export default function Experience() {
   return (
     <section id="experience" className="section-padding">
@@ -77,8 +76,8 @@ export default function Experience() {
         </motion.div>
 
         <div className="relative">
-          {/* Timeline Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-primary transform md:-translate-x-1/2" />
+          {/* Timeline line only on desktop */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-primary transform -translate-x-1/2" />
 
           <div className="space-y-12">
             {experiences.map((exp, index) => (
@@ -88,18 +87,18 @@ export default function Experience() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
-                className={`relative flex items-center ${
+                className={`relative flex flex-col md:items-center ${
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                } flex-col md:space-x-8`}
+                } md:space-x-8`}
               >
-                {/* Timeline Dot */}
-                <div className="absolute left-4 md:left-1/2 w-4 h-4 bg-primary rounded-full transform md:-translate-x-1/2 border-4 border-background z-10 shadow-3d">
+                {/* Timeline dot only on desktop */}
+                <div className="hidden md:block absolute left-1/2 w-4 h-4 bg-primary rounded-full transform -translate-x-1/2 border-4 border-background z-10 shadow-3d">
                   <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-30" />
                 </div>
 
-                {/* Content */}
+                {/* Card content */}
                 <div
-                  className={`w-full md:w-1/2 ml-12 md:ml-0 ${
+                  className={`w-full md:w-1/2 ${
                     index % 2 === 0 ? "md:pr-8" : "md:pl-8"
                   }`}
                 >
@@ -165,27 +164,16 @@ export default function Experience() {
                       </div>
                     </div>
 
-                    {/* Hover Effect */}
+                    {/* Hover gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 rounded-lg transition-opacity duration-300 pointer-events-none" />
                   </motion.div>
                 </div>
 
-                {/* Spacer for the other side */}
+                {/* Spacer for other side (desktop only) */}
                 <div className="hidden md:block w-1/2" />
               </motion.div>
             ))}
           </div>
-
-          {/* Bottom decoration */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="absolute bottom-0 left-4 md:left-1/2 w-8 h-8 bg-secondary rounded-full transform md:-translate-x-1/2 flex items-center justify-center shadow-3d"
-          >
-            <div className="w-3 h-3 bg-secondary-foreground rounded-full" />
-          </motion.div>
         </div>
       </div>
     </section>
