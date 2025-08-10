@@ -10,14 +10,14 @@ export default function ProjectManager() {
     techStack: "",
     githubLink: "",
     liveDemo: "",
-    image: null as File | null,
+    image: null as File | string | null,
   });
   const [editId, setEditId] = useState<string | null>(null);
 
   const fetchProjects = async () => {
-  const allProjects = await projectsAPI.getAll();
-  setProjects(allProjects);
-};
+    const allProjects = await projectsAPI.getAll();
+    setProjects(allProjects);
+  };
 
   useEffect(() => {
     fetchProjects();
@@ -26,7 +26,13 @@ export default function ProjectManager() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.title || !form.description || !form.techStack || !form.githubLink || !form.liveDemo) {
+    if (
+      !form.title ||
+      !form.description ||
+      !form.techStack ||
+      !form.githubLink ||
+      !form.liveDemo
+    ) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -37,9 +43,13 @@ export default function ProjectManager() {
     });
 
     if (editId) {
-      await api.put(`/project/${editId}`, formData);
+      await api.put(`/project/${editId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     } else {
-      await api.post("/project", formData);
+      await api.post("/project", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     }
 
     setForm({
@@ -57,6 +67,13 @@ export default function ProjectManager() {
   const handleDelete = async (id: string) => {
     await api.delete(`/project/${id}`);
     fetchProjects();
+  };
+
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return "";
+    return imagePath.startsWith("http")
+      ? imagePath
+      : `https://portfolio-w34d.onrender.com/${imagePath}`;
   };
 
   return (
@@ -104,13 +121,30 @@ export default function ProjectManager() {
           onChange={(e) => setForm({ ...form, liveDemo: e.target.value })}
           className="w-full text-gray-500 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+
         <input
           type="file"
-          onChange={(e) =>
-            setForm({ ...form, image: e.target.files?.[0] || null })
-          }
+          accept="image/*"
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              setForm({ ...form, image: e.target.files[0] });
+            }
+          }}
           className="w-full"
         />
+
+        {/* Preview for selected or existing image */}
+        {form.image && (
+          <img
+            src={
+              typeof form.image === "string"
+                ? getImageUrl(form.image)
+                : URL.createObjectURL(form.image)
+            }
+            alt="Preview"
+            className="w-32 h-32 object-cover rounded border mt-2"
+          />
+        )}
 
         <button
           type="submit"
@@ -133,7 +167,7 @@ export default function ProjectManager() {
             >
               {p.image && (
                 <img
-                  src={p.image}
+                  src={getImageUrl(p.image)}
                   alt={p.title}
                   className="w-full h-40 object-cover rounded-lg mb-3"
                 />
@@ -168,7 +202,7 @@ export default function ProjectManager() {
                       techStack: p.techStack,
                       githubLink: p.githubLink,
                       liveDemo: p.liveDemo,
-                      image: null,
+                      image: p.image, // keep existing image URL
                     });
                     setEditId(p._id);
                   }}

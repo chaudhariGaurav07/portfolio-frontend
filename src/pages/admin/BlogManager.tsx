@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from "@/lib/api";
 
+const API_BASE =
+  import.meta.env.VITE_API_URL?.replace(/\/$/, "") ||
+  "https://portfolio-w34d.onrender.com/api/v1";
+
 export default function BlogManager() {
   const [blogs, setBlogs] = useState([]);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -11,6 +16,7 @@ export default function BlogManager() {
     externalLink: "",
     published: "true",
     image: null as File | null,
+    existingImage: "",
   });
   const [editId, setEditId] = useState<string | null>(null);
 
@@ -28,6 +34,14 @@ export default function BlogManager() {
     fetchBlogs();
   }, []);
 
+  const getImageUrl = (path: string) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+
+    const base = API_BASE.replace("/api/v1", "");
+    return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -37,14 +51,27 @@ export default function BlogManager() {
     }
 
     const formData = new FormData();
-    Object.entries(form).forEach(([key, value]) => {
-      if (value !== null) formData.append(key, value as any);
-    });
+    formData.append("title", form.title);
+    formData.append("content", form.content);
+    formData.append("category", form.category);
+    formData.append("tags", form.tags);
+    formData.append("externalLink", form.externalLink);
+    formData.append("published", form.published);
+
+    if (form.image instanceof File) {
+      formData.append("image", form.image);
+    } else if (form.existingImage) {
+      formData.append("existingImage", form.existingImage);
+    }
 
     if (editId) {
-      await api.put(`/blog/${editId}`, formData);
+      await api.put(`/blog/${editId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     } else {
-      await api.post("/blog", formData);
+      await api.post("/blog", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     }
 
     setForm({
@@ -55,7 +82,9 @@ export default function BlogManager() {
       externalLink: "",
       published: "true",
       image: null,
+      existingImage: "",
     });
+    setPreviewImage(null);
     setEditId(null);
     fetchBlogs();
   };
@@ -63,6 +92,15 @@ export default function BlogManager() {
   const handleDelete = async (id: string) => {
     await api.delete(`/blog/${id}`);
     fetchBlogs();
+  };
+
+  const handleImageChange = (file: File | null) => {
+    setForm({ ...form, image: file });
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    } else {
+      setPreviewImage(null);
+    }
   };
 
   return (
@@ -81,54 +119,68 @@ export default function BlogManager() {
           placeholder="Title *"
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
-          className="w-full border text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border text-gray-500 rounded-lg px-4 py-2"
         />
         <textarea
           placeholder="Content *"
           value={form.content}
           onChange={(e) => setForm({ ...form, content: e.target.value })}
-          className="w-full border text-gray-500 rounded-lg px-4 py-2 h-28 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border text-gray-500 rounded-lg px-4 py-2 h-28"
         />
         <input
           type="text"
           placeholder="Category"
           value={form.category}
           onChange={(e) => setForm({ ...form, category: e.target.value })}
-          className="w-full border text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border text-gray-500 rounded-lg px-4 py-2"
         />
         <input
           type="text"
           placeholder="Tags *"
           value={form.tags}
           onChange={(e) => setForm({ ...form, tags: e.target.value })}
-          className="w-full border text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border text-gray-500 rounded-lg px-4 py-2"
         />
         <input
           type="url"
           placeholder="External Link *"
           value={form.externalLink}
           onChange={(e) => setForm({ ...form, externalLink: e.target.value })}
-          className="w-full border text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border text-gray-500 rounded-lg px-4 py-2"
         />
         <select
           value={form.published}
           onChange={(e) => setForm({ ...form, published: e.target.value })}
-          className="w-full border text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border text-gray-500 rounded-lg px-4 py-2"
         >
           <option value="true">Published</option>
           <option value="false">Draft</option>
         </select>
+
         <input
           type="file"
-          onChange={(e) =>
-            setForm({ ...form, image: e.target.files?.[0] || null })
-          }
+          onChange={(e) => handleImageChange(e.target.files?.[0] || null)}
           className="w-full"
         />
 
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="w-full h-40 object-cover rounded-lg mb-3"
+          />
+        )}
+        {!previewImage && form.existingImage && (
+          <img
+            src={getImageUrl(form.existingImage)}
+            alt="Current"
+            className="w-full h-40 object-cover rounded-lg mb-3"
+          />
+        )}
+
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg"
         >
           {editId ? "Update Blog" : "Add Blog"}
         </button>
@@ -143,11 +195,11 @@ export default function BlogManager() {
           {blogs.map((b: any) => (
             <div
               key={b._id}
-              className="bg-white border rounded-lg shadow hover:shadow-lg transition p-4 flex flex-col"
+              className="bg-white border rounded-lg shadow p-4 flex flex-col"
             >
               {b.image && (
                 <img
-                  src={b.image}
+                  src={getImageUrl(b.image)}
                   alt={b.title}
                   className="w-full h-40 object-cover rounded-lg mb-3"
                 />
@@ -160,7 +212,9 @@ export default function BlogManager() {
               <span className="text-xs text-gray-500">{b.tags}</span>
               <span
                 className={`mt-1 text-xs font-semibold ${
-                  b.published === "true" ? "text-green-600" : "text-yellow-500"
+                  b.published === "true"
+                    ? "text-green-600"
+                    : "text-yellow-500"
                 }`}
               >
                 {b.published === "true" ? "Published" : "Draft"}
@@ -187,7 +241,9 @@ export default function BlogManager() {
                       externalLink: b.externalLink,
                       published: b.published,
                       image: null,
+                      existingImage: b.image,
                     });
+                    setPreviewImage(null);
                     setEditId(b._id);
                   }}
                   className="px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white rounded"
