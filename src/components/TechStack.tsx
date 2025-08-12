@@ -1,5 +1,4 @@
-import { motion, useAnimationFrame } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import {
   SiReact,
   SiTypescript,
@@ -123,34 +122,21 @@ const techCategories = [
 
 const allTechs = techCategories.flatMap((cat) => cat.techs);
 
+const getIconPosition = (index) => {
+  const radius = 140;
+  const angle = (index / allTechs.length) * Math.PI * 2;
+  const x = Math.cos(angle) * radius;
+  const y = Math.sin(angle) * radius;
+  return { x, y };
+};
+
 export default function TechStack() {
-  const tick = useRef(0);
-  const iconRefs = useRef([]);
-
-  // Smooth rotation without re-render
-  useAnimationFrame((t) => {
-    tick.current = t / 2000;
-    iconRefs.current.forEach((el, index) => {
-      if (!el) return;
-      const angle =
-        (index / allTechs.length) * Math.PI * 2 + tick.current * 0.5;
-      const radius = 120 + Math.sin(index) * 30;
-      const x = Math.cos(angle) * radius;
-      const y = Math.sin(angle) * radius;
-      const z = Math.sin(index * 0.5 + tick.current) * 50;
-      el.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateX(${
-        Math.sin(tick.current + index) * 10
-      }deg) rotateY(${Math.cos(tick.current + index) * 10}deg)`;
-    });
-  });
-
   return (
     <section id="about" className="section-padding bg-muted/30">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
@@ -166,7 +152,6 @@ export default function TechStack() {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.2 }}
             className="relative mx-auto max-w-4xl h-96 bg-gradient-card rounded-3xl border border-border/30 overflow-hidden"
             style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
@@ -179,119 +164,128 @@ export default function TechStack() {
               </div>
             </div>
 
-            {/* Floating Tech Icons */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              {allTechs.map((tech, index) => (
-                <motion.div
-                  key={tech.name}
-                  ref={(el) => (iconRefs.current[index] = el)}
-                  className="absolute tech-icon cursor-pointer group"
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                  whileHover={{
-                    scale: 1.3,
-                    rotateX: -15,
-                    rotateY: 15,
-                    transition: { duration: 0.3 },
-                  }}
-                  style={{ willChange: "transform" }}
-                >
-                  {/* Infinite rotation added here */}
+            {/* Floating Tech Icons container with continuous rotation */}
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center"
+              animate={{ rotate: 360 }}
+              transition={{
+                repeat: Infinity,
+                duration: 20,
+                ease: "linear",
+              }}
+            >
+              {allTechs.map((tech, index) => {
+                const { x, y } = getIconPosition(index);
+                return (
                   <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 2,
-                      ease: "linear",
+                    key={tech.name}
+                    className="absolute tech-icon cursor-pointer group"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.5 + index * 0.05 }}
+                    whileHover={{
+                      scale: 1.3,
+                      rotateX: -15,
+                      rotateY: 15,
+                      transition: { duration: 0.3 },
+                    }}
+                    style={{
+                      x,
+                      y,
+                      rotate: -360 // Counter-rotate the icon so it stays upright
                     }}
                   >
-                    <tech.icon
-                      className={`w-8 h-8 ${tech.color} group-hover:scale-110 transition-transform duration-300`}
-                    />
-                  </motion.div>
-
-                  {/* Tooltip */}
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-card border border-border rounded-lg px-3 py-1 text-sm font-medium whitespace-nowrap z-10">
-                    {tech.name}
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-card border-r border-b border-border rotate-45 -mt-1" />
-                  </div>
-
-                  {/* Progress circle */}
-                  <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <svg
-                      className="absolute inset-0 w-full h-full"
-                      viewBox="0 0 100 100"
+                    {/* Individual icon rotation */}
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 5,
+                        ease: "linear",
+                      }}
                     >
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        fill="none"
-                        stroke="hsl(var(--border))"
-                        strokeWidth="2"
+                      <tech.icon
+                        className={`w-8 h-8 ${tech.color} group-hover:scale-110 transition-transform duration-300`}
                       />
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        fill="none"
-                        stroke="hsl(var(--primary))"
-                        strokeWidth="2"
-                        strokeDasharray={`${tech.proficiency * 2.83} 283`}
-                        strokeLinecap="round"
-                        transform="rotate(-90 50 50)"
-                      />
-                    </svg>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                    </motion.div>
+
+                    {/* Tooltip */}
+                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-card border border-border rounded-lg px-3 py-1 text-sm font-medium whitespace-nowrap z-10">
+                      {tech.name}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-card border-r border-b border-border rotate-45 -mt-1" />
+                    </div>
+
+                    {/* Progress circle */}
+                    <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <svg
+                        className="absolute inset-0 w-full h-full"
+                        viewBox="0 0 100 100"
+                      >
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="45"
+                          fill="none"
+                          stroke="hsl(var(--border))"
+                          strokeWidth="2"
+                        />
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="45"
+                          fill="none"
+                          stroke="hsl(var(--primary))"
+                          strokeWidth="2"
+                          strokeDasharray={`${tech.proficiency * 2.83} 283`}
+                          strokeLinecap="round"
+                          transform="rotate(-90 50 50)"
+                        />
+                      </svg>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
 
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-primary rounded-full opacity-20 blur-3xl animate-pulse-glow" />
           </motion.div>
 
-          {/* Category Labels */}
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-  {techCategories.map((category, index) => (
-    <motion.div
-      key={category.title}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 + 0.5 }}
-      className="text-center p-6 card-3d"
-    >
-      <h3 className="text-lg font-semibold mb-3 gradient-text">
-        {category.title}
-      </h3>
-      <div className="space-y-2">
-        {category.techs.map((tech) => (
-          <div
-            key={tech.name}
-            className="flex items-center justify-between text-sm"
-          >
-            <span className="text-muted-foreground">{tech.name}</span>
-            <div className="flex items-center space-x-1">
-              <div className="w-12 h-1 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-primary rounded-full transition-all duration-1000"
-                  style={{ width: `${tech.proficiency}%` }}
-                />
-              </div>
-              <span className="text-xs text-muted-foreground">
-                {tech.proficiency}%
-              </span>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+            {techCategories.map((category, index) => (
+              <motion.div
+                key={category.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 + 0.5 }}
+                className="text-center p-6 card-3d"
+              >
+                <h3 className="text-lg font-semibold mb-3 gradient-text">
+                  {category.title}
+                </h3>
+                <div className="space-y-2">
+                  {category.techs.map((tech) => (
+                    <div
+                      key={tech.name}
+                      className="flex items-center justify-between text-sm"
+                    >
+                      <span className="text-muted-foreground">{tech.name}</span>
+                      <div className="flex items-center space-x-1">
+                        <div className="w-12 h-1 bg-muted rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-primary rounded-full transition-all duration-1000"
+                            style={{ width: `${tech.proficiency}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-muted-foreground">
+                          {tech.proficiency}%
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
-        ))}
-      </div>
-    </motion.div>
-  ))}
-</div>
-
-
         </div>
       </div>
     </section>

@@ -31,13 +31,20 @@ export default function Navbar() {
     document.documentElement.classList.toggle('light');
   };
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+ const scrollToSection = (href: string) => {
+  const element = document.querySelector(href);
+  if (element) {
+    if (isMobileMenuOpen) {
       setIsMobileMenuOpen(false);
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }, 300); 
+    } else {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }
+};
+
 
   return (
     <motion.nav
