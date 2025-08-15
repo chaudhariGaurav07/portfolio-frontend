@@ -86,7 +86,7 @@ export default function Hero() {
           return (
             <motion.div
               key={index}
-              className="absolute text-primary/20"
+              className="absolute text-primary/50"
               style={{
                 top: `${Math.random() * 100}%`,
                 left: `${xStart}%`,
@@ -197,7 +197,7 @@ export default function Hero() {
               className="text-base sm:text-lg px-4 sm:px-8 py-3 sm:py-4 border-primary/30 hover:border-primary bg-transparent w-full sm:w-auto"
               onClick={() =>
                 window.open(
-                  'https://drive.google.com/file/d/1B9jn6_-sWrIQ4-_jnNzUA34QfyA-ewZA/view',
+                  'https://drive.google.com/file/d/1VwNaH1t4zrD8TYgpoN7JIpu_ed5Bb0Pu/view',
                   '_blank'
                 )
               }

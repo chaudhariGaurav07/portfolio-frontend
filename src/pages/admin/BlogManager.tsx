@@ -17,6 +17,7 @@ export default function BlogManager() {
     published: "true",
     image: null as File | null,
     existingImage: "",
+    publishedAt: "",
   });
   const [editId, setEditId] = useState<string | null>(null);
 
@@ -57,6 +58,7 @@ export default function BlogManager() {
     formData.append("tags", form.tags);
     formData.append("externalLink", form.externalLink);
     formData.append("published", form.published);
+    formData.append("publishedAt", form.publishedAt);
 
     if (form.image instanceof File) {
       formData.append("image", form.image);
@@ -83,6 +85,7 @@ export default function BlogManager() {
       published: "true",
       image: null,
       existingImage: "",
+      publishedAt: "",
     });
     setPreviewImage(null);
     setEditId(null);
@@ -139,6 +142,13 @@ export default function BlogManager() {
           placeholder="Tags *"
           value={form.tags}
           onChange={(e) => setForm({ ...form, tags: e.target.value })}
+          className="w-full border text-gray-500 rounded-lg px-4 py-2"
+        />
+         <input
+          type="date"
+          placeholder="published At"
+          value={form.publishedAt}
+          onChange={(e) => setForm({ ...form, publishedAt: e.target.value })}
           className="w-full border text-gray-500 rounded-lg px-4 py-2"
         />
         <input
@@ -242,6 +252,7 @@ export default function BlogManager() {
                       published: b.published,
                       image: null,
                       existingImage: b.image,
+                      publishedAt: b.publishedAt
                     });
                     setPreviewImage(null);
                     setEditId(b._id);
