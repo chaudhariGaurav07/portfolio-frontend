@@ -10,7 +10,7 @@ const experiences = [
     location: "Remote",
     logo: "/assets/gssoc.png",
     description:
-      "Built scalable full-stack features, fixed bugs, and improved documentation for open-source projects. Promoted GSSoC in college, organized info sessions, and onboarded participants. Collaborated in code reviews and gained expertise in Git, GitHub, and CI/CD workflows.",
+      "Built scalable full-stack features, fixed bugs, and improved documentation for open-source projects...",
     technologies: [
       "React",
       "Node.js",
@@ -20,16 +20,29 @@ const experiences = [
       "Git",
       "GitHub",
     ],
+    subRoles: [
+      {
+        title: "Contributor",
+        duration: "Jul 2025 - Present",
+        badge: "/assets/contributor.png",
+      },
+      {
+        title: "Campus Ambassador",
+        duration: "Jul 2025 - Jul 2025",
+        badge: "/assets/campus-ambassador.png",
+      },
+    ],
   },
+
   {
     id: "2",
-    company: "Akatsukin Coding Club",
-    position: "Technical Team Member",
+    company: "Akatsuki Coding Club",
+    position: "Core Team Member + Technical Team Member",
     duration: "Oct 2024 - Present",
     logo: "/assets/akatsuki.png",
     location: "RC Patel Institute of Technology, Shirpur",
     description:
-      "Developed internal tools and event websites, handled technical setups, and contributed to UI/UX design. Conducted workshops, including React.js training, and collaborated across teams for smooth event execution.",
+      "Contributing to club leadership, conducting workshops, building event tools, managing technical workflows...",
     technologies: [
       "React",
       "Express.js",
@@ -41,7 +54,20 @@ const experiences = [
       "React-Native",
       "Expo",
     ],
+    subRoles: [
+      {
+        title: "Core Team Member",
+        duration: "Oct 2025 - Present",
+        badge: "/assets/core-member.png",
+      },
+      {
+        title: "Technical Team Member",
+        duration: "Oct 2024 - Present",
+        badge: "/assets/tech-member.png",
+      },
+    ],
   },
+
   {
     id: "3",
     company: "R3 System India Private Limited",
@@ -50,7 +76,7 @@ const experiences = [
     logo: "/assets/r3sys.png",
     location: "Nashik",
     description:
-      "Created interactive dashboards and visual reports using Power BI for event and performance analysis. Collected, cleaned, and analyzed data to support decision-making and integrated insights into internal tools.",
+      "Created interactive dashboards using Power BI for event and performance analysis...",
     technologies: ["Power BI", "Excel", "DAX", "Data Visualization", "Figma"],
   },
 ];
@@ -59,6 +85,7 @@ export default function Experience() {
   return (
     <section id="experience" className="section-padding">
       <div className="container-custom">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -76,10 +103,10 @@ export default function Experience() {
         </motion.div>
 
         <div className="relative">
-          {/* Timeline line only on desktop */}
+          {/* Timeline line */}
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-primary transform -translate-x-1/2" />
 
-          <div className="space-y-12">
+          <div className="space-y-14">
             {experiences.map((exp, index) => (
               <motion.div
                 key={exp.id}
@@ -91,12 +118,12 @@ export default function Experience() {
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 } md:space-x-8`}
               >
-                {/* Timeline dot only on desktop */}
+                {/* Timeline dot */}
                 <div className="hidden md:block absolute left-1/2 w-4 h-4 bg-primary rounded-full transform -translate-x-1/2 border-4 border-background z-10 shadow-3d">
                   <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-30" />
                 </div>
 
-                {/* Card content */}
+                {/* Main Card */}
                 <div
                   className={`w-full md:w-1/2 ${
                     index % 2 === 0 ? "md:pr-8" : "md:pl-8"
@@ -107,12 +134,12 @@ export default function Experience() {
                       scale: 1.02,
                       rotateY: index % 2 === 0 ? 2 : -2,
                     }}
-                    className="card-3d p-6 group cursor-pointer"
+                    className="card-3d p-6 group cursor-pointer relative"
                   >
-                    {/* Company & Position */}
+                    {/* Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                        <h3 className="text-xl font-bold group-hover:text-primary transition-colors duration-300">
                           {exp.position}
                         </h3>
                         <div className="flex items-center space-x-2 text-primary mt-1">
@@ -120,7 +147,8 @@ export default function Experience() {
                           <span className="font-medium">{exp.company}</span>
                         </div>
                       </div>
-                      <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+
+                      <div className="w-12 h-12 flex-shrink-0 overflow-hidden rounded-lg">
                         <img
                           src={exp.logo}
                           alt={`${exp.company} logo`}
@@ -129,7 +157,7 @@ export default function Experience() {
                       </div>
                     </div>
 
-                    {/* Duration & Location */}
+                    {/* Duration + Location */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 mb-4 text-sm text-muted-foreground">
                       <div className="flex items-center space-x-2">
                         <Calendar className="w-4 h-4" />
@@ -142,21 +170,47 @@ export default function Experience() {
                     </div>
 
                     {/* Description */}
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
                       {exp.description}
                     </p>
 
+                    {/* 📌 Sub-Roles (Contributor + Campus Ambassador style) */}
+                    {exp.subRoles && (
+                      <div className="mt-6 space-y-5">
+                        {exp.subRoles.map((role, i) => (
+                          <div key={i} className="flex items-start space-x-4">
+                            {/* Tiny timeline dot */}
+                            <div className="mt-1 w-3 h-3 rounded-full bg-primary border-2 border-background shadow" />
+
+                            <div>
+                              <p className="font-semibold text-foreground">
+                                {role.title}
+                              </p>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                {role.duration}
+                              </p>
+
+                              {/* Badge */}
+                              <img
+                                src={role.badge}
+                                alt={role.title}
+                                className="w-28 h-auto rounded-md border shadow-sm"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     {/* Technologies */}
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-semibold text-foreground">
-                        Key Technologies:
-                      </h4>
+                    <div className="space-y-2 mt-6">
+                      <h4 className="text-sm font-semibold">Key Technologies:</h4>
                       <div className="flex flex-wrap gap-2">
                         {exp.technologies.map((tech) => (
                           <motion.span
                             key={tech}
                             whileHover={{ scale: 1.1, rotateZ: 2 }}
-                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20 cursor-pointer"
+                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20"
                           >
                             {tech}
                           </motion.span>
@@ -164,12 +218,11 @@ export default function Experience() {
                       </div>
                     </div>
 
-                    {/* Hover gradient overlay */}
+                    {/* Hover Layer */}
                     <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 rounded-lg transition-opacity duration-300 pointer-events-none" />
                   </motion.div>
                 </div>
 
-                {/* Spacer for other side (desktop only) */}
                 <div className="hidden md:block w-1/2" />
               </motion.div>
             ))}
@@ -179,3 +232,4 @@ export default function Experience() {
     </section>
   );
 }
+

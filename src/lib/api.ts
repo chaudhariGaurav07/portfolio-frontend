@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Project, BlogPost, ContactForm, AIResponse } from '@/types';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://portfolio-w34d.onrender.com/api/v1/',
+  baseURL: import.meta.env.VITE_API_URL || 'https://portfolio-backend-ysqf.vercel.app/api/v1/',
   timeout: 50000,
   headers: {
     'Content-Type': 'application/json',
