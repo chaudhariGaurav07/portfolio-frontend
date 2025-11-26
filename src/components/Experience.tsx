@@ -24,12 +24,10 @@ const experiences = [
       {
         title: "Contributor",
         duration: "Jul 2025 - Present",
-        badge: "/assets/contributor.png",
       },
       {
         title: "Campus Ambassador",
         duration: "Jul 2025 - Jul 2025",
-        badge: "/assets/campus-ambassador.png",
       },
     ],
   },
@@ -58,12 +56,10 @@ const experiences = [
       {
         title: "Core Team Member",
         duration: "Oct 2025 - Present",
-        badge: "/assets/core-member.png",
       },
       {
         title: "Technical Team Member",
         duration: "Oct 2024 - Present",
-        badge: "/assets/tech-member.png",
       },
     ],
   },
@@ -174,7 +170,7 @@ export default function Experience() {
                       {exp.description}
                     </p>
 
-                    {/* 📌 Sub-Roles (Contributor + Campus Ambassador style) */}
+                    {/* Sub-Roles (Badge removed) */}
                     {exp.subRoles && (
                       <div className="mt-6 space-y-5">
                         {exp.subRoles.map((role, i) => (
@@ -186,16 +182,9 @@ export default function Experience() {
                               <p className="font-semibold text-foreground">
                                 {role.title}
                               </p>
-                              <p className="text-xs text-muted-foreground mb-2">
+                              <p className="text-xs text-muted-foreground">
                                 {role.duration}
                               </p>
-
-                              {/* Badge */}
-                              <img
-                                src={role.badge}
-                                alt={role.title}
-                                className="w-28 h-auto rounded-md border shadow-sm"
-                              />
                             </div>
                           </div>
                         ))}
@@ -232,4 +221,3 @@ export default function Experience() {
     </section>
   );
 }
-
