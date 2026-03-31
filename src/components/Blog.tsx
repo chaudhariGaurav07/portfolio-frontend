@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Calendar, User, Tag, X, ExternalLink, PenTool, Newspaper } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Clock, Calendar, User, ExternalLink, Newspaper } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -9,8 +8,12 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import { X, Tag } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { blogAPI } from "@/lib/api";
 import { BlogPost } from "@/types";
+
+const tagColors = ['tag-cyan', 'tag-green', 'tag-blue', 'tag-yellow'];
 
 export default function Blog() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -22,13 +25,7 @@ export default function Blog() {
     const fetchBlogs = async () => {
       try {
         const res = await blogAPI.getAll();
-        console.log("Fetched blogs:", res);
-
-        const mappedBlogs = res.map((item: any) => ({
-          ...item,
-          id: item._id,
-        }));
-
+        const mappedBlogs = res.map((item: any) => ({ ...item, id: item._id }));
         setBlogs(mappedBlogs);
       } catch (error) {
         console.error("Failed to fetch blogs:", error);
@@ -36,7 +33,6 @@ export default function Blog() {
         setLoading(false);
       }
     };
-
     fetchBlogs();
   }, []);
 
@@ -57,139 +53,159 @@ export default function Blog() {
 
   if (loading) {
     return (
-      <section id="blog" className="section-padding">
+      <section id="blog" className="section-padding grid-bg">
         <div className="container-custom">
-          <div className="text-center">
-            <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-            <p className="mt-4 text-muted-foreground">Loading blog posts...</p>
+          <div className="flex items-center justify-center py-20">
+            <div className="font-mono text-sm" style={{ color: '#00F5FF' }}>
+              <span style={{ color: '#00FF41' }}>{'>'}</span> fetching blog posts<span className="terminal-cursor ml-1" />
+            </div>
           </div>
         </div>
       </section>
     );
   }
 
+  // Duplicate for seamless infinite marquee loop
+  const marqueeBlogs = [...blogs, ...blogs];
+
   return (
     <>
-      <section id="blog" className="section-padding">
+      <section id="blog" className="section-padding grid-bg">
         <div className="container-custom">
+
+          {/* Section Header */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.7 }}
+            className="mb-12"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="gradient-text">Latest Blog Posts</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Thoughts, insights, and learnings from my development journey
+            <p className="font-mono text-xs tracking-widest mb-2" style={{ color: 'rgba(0,245,255,0.5)' }}>
+              grep -r "articles" ./blog
             </p>
+            <h2 className="font-orbitron font-bold text-3xl md:text-4xl tracking-wider" style={{ color: '#E8EDF3' }}>
+              READ_<span style={{ color: '#00F5FF' }}>BLOG</span>
+            </h2>
+            <div className="h-px mt-3 w-24" style={{ background: 'linear-gradient(90deg, #00FF41, transparent)' }} />
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-           {blogs.map((blog, index) => (
-  <motion.a
-    key={blog._id}
-    href={blog.externalLink}
-    target="_blank"
-    rel="noopener noreferrer"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.6, delay: index * 0.1 }}
-    whileHover={{ y: -10 }}
-    className="group cursor-pointer block"
-  >
-    <div className="card-3d overflow-hidden h-full flex flex-col border border-border rounded-lg shadow-lg bg-background relative">
-      {/* Cover Image */}
-      {blog.image && (
-        <img
-          src={blog.image}
-          alt={blog.title}
-          className="w-full h-48 object-cover"
-        />
-      )}
-
-      {/* Blog Header */}
-      <div className="p-6 flex-1">
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {blog.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium border border-primary/20"
-            >
-              #{tag}
-            </span>
-          ))}
-          {blog.tags.length > 3 && (
-            <span className="px-2 py-1 bg-muted text-muted-foreground rounded text-xs">
-              +{blog.tags.length - 3} more
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2">
-          {blog.title}
-        </h3>
-
-        {/* Excerpt */}
-        <p className="text-muted-foreground mb-4 text-sm leading-relaxed line-clamp-3">
-          {blog.excerpt}
-        </p>
-
-        {/* Meta Info */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1">
-              <User className="w-3 h-3" />
-              <span>{blog.author}</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Calendar className="w-3 h-3" />
-              <span>
-                {new Date(blog.publishedAt).toLocaleDateString()}
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Clock className="w-3 h-3" />
-            <span>{blog.readTime} min read</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Read More */}
-      <div className="p-6 pt-0 flex items-center justify-center gap-2 text-primary font-medium">
-        Read More <ExternalLink className="w-4 h-4" />
-      </div>
-
-      {/* Hover Effect */}
-      <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none" />
-    </div>
-  </motion.a>
-))}
-
-          </div>
-
-          {/* View All Blogs Button */}
+          {/* Blog Marquee Row */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-center mt-12"
+            transition={{ duration: 0.7 }}
           >
-           <Button
-  variant="outline"
-  size="lg"
-  className="btn-3d border-primary/30 hover:border-primary bg-transparent"
-  onClick={() => window.open('https://medium.com/@gauravchaudhari_', '_blank')}
->
-  View All Blog Posts <Newspaper />
-</Button>
+            <div
+              className="overflow-hidden"
+              style={{
+                maskImage: 'linear-gradient(90deg, transparent, black 6%, black 94%, transparent)',
+                WebkitMaskImage: 'linear-gradient(90deg, transparent, black 6%, black 94%, transparent)',
+              }}
+            >
+              <div
+                className="flex gap-4 blog-marquee-track"
+                style={{ width: 'max-content' }}
+              >
+                {marqueeBlogs.map((blog, index) => (
+                  <a
+                    key={`blog-${blog._id}-${index}`}
+                    href={blog.externalLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-shrink-0 group"
+                    style={{ width: '300px' }}
+                  >
+                    <div
+                      className="h-full flex flex-col rounded-lg overflow-hidden transition-all duration-300"
+                      style={{
+                        background: 'rgba(13,17,23,0.85)',
+                        border: '1px solid rgba(0,245,255,0.12)',
+                      }}
+                      onMouseEnter={e => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.borderColor = 'rgba(0,245,255,0.4)';
+                        el.style.boxShadow = '0 0 20px rgba(0,245,255,0.15)';
+                        el.style.transform = 'translateY(-4px)';
+                      }}
+                      onMouseLeave={e => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.borderColor = 'rgba(0,245,255,0.12)';
+                        el.style.boxShadow = 'none';
+                        el.style.transform = 'translateY(0)';
+                      }}
+                    >
+                      {/* Cover image */}
+                      {blog.image && (
+                        <div className="overflow-hidden" style={{ height: '140px' }}>
+                          <img
+                            src={blog.image}
+                            alt={blog.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                      )}
+
+                      <div className="p-4 flex flex-col gap-2 flex-1">
+                        {/* Date + tag */}
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-[10px] flex items-center gap-1" style={{ color: 'rgba(232,237,243,0.35)' }}>
+                            <Calendar className="w-3 h-3" />
+                            {new Date(blog.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
+                          {blog.tags[0] && (
+                            <span className={tagColors[index % tagColors.length]} style={{ fontSize: '0.6rem' }}>
+                              {blog.tags[0]}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <p
+                          className="font-semibold text-xs leading-snug line-clamp-2 transition-colors duration-200"
+                          style={{ color: '#E8EDF3', fontFamily: 'Inter, sans-serif' }}
+                        >
+                          {blog.title}
+                        </p>
+
+                        {/* Footer */}
+                        <div className="flex items-center justify-between mt-auto pt-2" style={{ borderTop: '1px solid rgba(0,245,255,0.08)' }}>
+                          <div className="flex items-center gap-2 font-mono text-[10px]" style={{ color: 'rgba(232,237,243,0.35)' }}>
+                            <span className="flex items-center gap-1"><User className="w-3 h-3" />{blog.author}</span>
+                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{blog.readTime}m</span>
+                          </div>
+                          <span className="font-mono text-[10px] flex items-center gap-0.5" style={{ color: 'rgba(0,245,255,0.6)' }}>
+                            READ <ExternalLink className="w-2.5 h-2.5" />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* View All */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="text-center mt-10"
+          >
+            <motion.a
+              href="https://medium.com/@gauravchaudhari_"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="btn-terminal inline-flex items-center gap-2"
+            >
+              <Newspaper className="w-4 h-4" />
+              VIEW_ALL_POSTS
+            </motion.a>
           </motion.div>
         </div>
       </section>
@@ -198,60 +214,37 @@ export default function Blog() {
       <AnimatePresence>
         {isModalOpen && selectedBlog && (
           <Dialog open={isModalOpen} onOpenChange={closeBlog}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-card border border-border">
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto"
+              style={{ background: '#0D1117', border: '1px solid rgba(0,245,255,0.2)' }}>
               <DialogHeader className="space-y-4">
                 <div className="flex items-start justify-between">
-                  <DialogTitle className="text-2xl font-bold gradient-text pr-8">
+                  <DialogTitle className="text-xl font-bold gradient-text pr-8">
                     {selectedBlog.title}
                   </DialogTitle>
                   <DialogClose asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="flex-shrink-0"
-                    >
+                    <Button variant="ghost" size="icon" className="flex-shrink-0">
                       <X className="w-4 h-4" />
                     </Button>
                   </DialogClose>
                 </div>
-
-                {/* Blog Meta */}
-                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center space-x-1">
-                    <User className="w-4 h-4" />
-                    <span>{selectedBlog.author}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>
-                      {new Date(selectedBlog.publishedAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{selectedBlog.readTime} min read</span>
-                  </div>
+                <div className="flex flex-wrap gap-4 text-xs font-mono"
+                  style={{ color: 'rgba(0,245,255,0.5)' }}>
+                  <span className="flex items-center gap-1"><User className="w-3 h-3" />{selectedBlog.author}</span>
+                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(selectedBlog.publishedAt).toLocaleDateString()}</span>
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{selectedBlog.readTime} min read</span>
                 </div>
-
-                {/* Tags */}
                 <div className="flex flex-wrap gap-2">
                   {selectedBlog.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20"
-                    >
-                      <Tag className="w-3 h-3 inline mr-1" />
-                      {tag}
+                    <span key={tag} className="tag-cyan text-xs">
+                      <Tag className="w-3 h-3 inline mr-1" />{tag}
                     </span>
                   ))}
                 </div>
               </DialogHeader>
-
-              {/* Blog Content */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
                 className="prose prose-invert max-w-none mt-6"
                 dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
               />

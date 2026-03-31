@@ -1,36 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Github, Linkedin, Mail, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import {
-  SiReact,
-  SiTypescript,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiNodedotjs,
-  SiExpress,
-  SiMongodb,
-  SiPostgresql,
-  SiAmazon,
-  SiVercel,
-  SiGit,
-  SiGithub,
-} from 'react-icons/si';
-
-const techIcons = [
-  SiReact,
-  SiTypescript,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiNodedotjs,
-  SiExpress,
-  SiMongodb,
-  SiPostgresql,
-  SiAmazon,
-  SiVercel,
-  SiGit,
-  SiGithub,
-];
+import { ChevronDown, Github, Linkedin, Mail } from 'lucide-react';
 
 const roles = [
   'Full Stack Developer',
@@ -39,233 +9,328 @@ const roles = [
   'Problem Solver',
 ];
 
+// Terminal lines exactly as in the reference image
+const terminalLines = [
+  { id: 0, type: 'prompt', cmd: 'whoami' },
+  { id: 1, type: 'output', text: 'Computer Engineer | Full-Stack Developer | System Architect' },
+  { id: 2, type: 'prompt', cmd: 'ls sections/' },
+  { id: 3, type: 'output-tags', tags: ['[ about.txt ]', '[ experience.md ]', '[ projects/ ]', '[ blog/ ]'] },
+  { id: 4, type: 'prompt-cursor' },
+];
+
 export default function Hero() {
   const [currentRole, setCurrentRole] = useState(0);
   const [displayText, setDisplayText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [visibleLines, setVisibleLines] = useState(0);
 
+  // Typewriter effect
   useEffect(() => {
     const role = roles[currentRole];
-    let charIndex = 0;
-    const typeInterval = setInterval(() => {
-      if (isTyping) {
-        if (charIndex < role.length) {
-          setDisplayText(role.slice(0, charIndex + 1));
-          charIndex++;
-        } else {
-          setIsTyping(false);
-          setTimeout(() => {
-            setIsTyping(true);
-            charIndex = 0;
-            setCurrentRole((prev) => (prev + 1) % roles.length);
-          }, 2000);
-        }
-      }
-    }, 100);
-    return () => clearInterval(typeInterval);
-  }, [currentRole, isTyping]);
+    let timeout: ReturnType<typeof setTimeout>;
+    if (!isDeleting && displayText.length < role.length) {
+      timeout = setTimeout(() => setDisplayText(role.slice(0, displayText.length + 1)), 75);
+    } else if (!isDeleting && displayText.length === role.length) {
+      timeout = setTimeout(() => setIsDeleting(true), 2400);
+    } else if (isDeleting && displayText.length > 0) {
+      timeout = setTimeout(() => setDisplayText(role.slice(0, displayText.length - 1)), 40);
+    } else if (isDeleting && displayText.length === 0) {
+      setIsDeleting(false);
+      setCurrentRole((prev) => (prev + 1) % roles.length);
+    }
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, currentRole]);
 
-  const scrollToAbout = () => {
-    document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // Animate terminal lines appearing
+  useEffect(() => {
+    if (visibleLines < terminalLines.length) {
+      const t = setTimeout(() => setVisibleLines((v) => v + 1), 500);
+      return () => clearTimeout(t);
+    }
+  }, [visibleLines]);
 
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center relative px-4 max-w-full overflow-x-hidden"
+      className="min-h-screen flex items-center justify-center relative px-4 grid-bg overflow-hidden"
     >
-      {/* Animated Icon Background */}
-      <div className="absolute inset-0 overflow-hidden z-0 max-w-full">
-        {techIcons.map((Icon, index) => {
-          const duration = 8 + Math.random() * 4;
-          const delay = Math.random() * 2;
-          const size = 20 + Math.random() * 24;
-          const xStart = Math.random() * 90; // keep icons inside screen
-          const xEnd = Math.random() * 90;
+      {/* Glow orbs */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: '20%', left: '10%', width: '500px', height: '500px',
+          background: 'radial-gradient(circle, rgba(0,245,255,0.05) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+      />
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: '15%', right: '8%', width: '400px', height: '400px',
+          background: 'radial-gradient(circle, rgba(0,255,65,0.04) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+      />
 
-          return (
+      <div className="container-custom relative z-10 w-full pt-16">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+          {/* ── LEFT COLUMN ── */}
+          <div>
+            {/* Available badge */}
             <motion.div
-              key={index}
-              className="absolute text-primary/50"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${xStart}%`,
-                fontSize: `${size}px`,
-              }}
-              animate={{
-                y: [0, -200],
-                x: [`${xStart}%`, `${xEnd}%`],
-                opacity: [0.2, 1, 0.2],
-                rotate: [0, 360],
-              }}
-              transition={{
-                duration,
-                delay,
-                repeat: Infinity,
-                repeatType: 'reverse',
-                ease: 'easeInOut',
-              }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex items-center gap-2 mb-5"
             >
-              <Icon />
+              <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#00FF41' }} />
+              <span className="font-mono text-xs tracking-widest" style={{ color: '#00FF41', letterSpacing: '0.12em' }}>
+                AVAILABLE FOR OPPORTUNITIES
+              </span>
             </motion.div>
-          );
-        })}
-      </div>
 
-      {/* Main Content */}
-      <div className="container-custom text-center relative z-10 w-full max-w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Profile Image */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="mb-6 sm:mb-8 flex justify-center"
-          >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-primary rounded-full flex items-center justify-center shadow-3d overflow-hidden">
-              <img
-                src="logo.png"
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </motion.div>
-
-          {/* Name */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6"
-          >
-            <span className="gradient-text">Gaurav</span>{' '}
-            <span className="text-foreground">Chaudhari</span>
-          </motion.h1>
-
-          {/* Role */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-6 sm:mb-8 h-6 sm:h-8"
-          >
-            <span className="font-medium">
-              {displayText}
-              <span className="typing animate-pulse">|</span>
-            </span>
-          </motion.div>
-
-          {/* About Paragraph */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl sm:max-w-3xl mx-auto mb-8 sm:mb-12 leading-relaxed italic px-3"
-          >
-            Passionate about creating digital experiences that make a
-            difference. I specialize in building scalable web applications with
-            modern technologies and contributing to open-source projects that
-            help developers worldwide.
-          </motion.p>
-
-          {/* Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-10 sm:mb-16 w-full"
-          >
-            <Button
-              size="sm"
-              className="btn-3d text-base sm:text-lg px-4 sm:px-8 py-3 sm:py-4 w-full sm:w-auto"
-              onClick={() =>
-                document
-                  .querySelector('#projects')
-                  ?.scrollIntoView({ behavior: 'smooth' })
-              }
+            {/* DEVELOPER CONSOLE heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="mb-4"
             >
-              View My Work
-            </Button>
+              <h1
+                className="font-orbitron font-black leading-none"
+                style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', lineHeight: 1.0 }}
+              >
+                <span className="block" style={{ color: '#E8EDF3' }}>DEVELOPER</span>
+                <span
+                  className="block"
+                  style={{
+                    background: 'linear-gradient(90deg, #00F5FF 0%, #00FF41 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    filter: 'drop-shadow(0 0 24px rgba(0,245,255,0.35))',
+                  }}
+                >
+                  CONSOLE
+                </span>
+              </h1>
+            </motion.div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-base sm:text-lg px-4 sm:px-8 py-3 sm:py-4 border-primary/30 hover:border-primary bg-transparent w-full sm:w-auto"
-              onClick={() =>
-                window.open(
-                  'https://drive.google.com/file/d/1VwNaH1t4zrD8TYgpoN7JIpu_ed5Bb0Pu/view',
-                  '_blank'
-                )
-              }
+            {/* Name comment */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="mb-3"
             >
-              <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              Download CV
-            </Button>
-          </motion.div>
+              <p className="font-mono text-base" style={{ color: 'rgba(232,237,243,0.5)' }}>
+                <span style={{ color: 'rgba(0,245,255,0.5)' }}>{'// '}</span>
+                Gaurav Chaudhari
+              </p>
+            </motion.div>
 
-          {/* Social Icons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
-            className="flex justify-center space-x-4 sm:space-x-6 mb-12 sm:mb-16"
-          >
-            {[
-              {
-                icon: Github,
-                href: 'https://github.com/chaudhariGaurav07',
-                label: 'GitHub',
-              },
-              {
-                icon: Linkedin,
-                href: 'https://www.linkedin.com/in/gaurav-chaudhari-b20176227/',
-                label: 'LinkedIn',
-              },
-              {
-                icon: Mail,
-                href: 'mailto:gauravchaudhari7717@example.com',
-                label: 'Email',
-              },
-            ].map(({ icon: Icon, href, label }) => (
+            {/* Typewriter role */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.55 }}
+              className="flex items-center gap-2 mb-6 h-7"
+            >
+              <span className="font-mono text-base font-bold" style={{ color: '#00FF41' }}>{'>'}</span>
+              <span className="font-mono text-sm" style={{ color: 'rgba(232,237,243,0.85)' }}>
+                {displayText}
+              </span>
+              <span className="terminal-cursor" />
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="text-sm leading-relaxed mb-7 max-w-md"
+              style={{ color: 'rgba(232,237,243,0.5)', fontFamily: 'Inter, sans-serif' }}
+            >
+              Passionate about creating digital experiences that make a difference.
+              I specialize in building scalable web applications with modern technologies
+              and contributing to open-source projects worldwide.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.85 }}
+              className="flex flex-wrap gap-3 mb-7"
+            >
+              <motion.button
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
+                className="btn-3d flex items-center gap-2 text-xs"
+                style={{ padding: '0.6rem 1.4rem', fontSize: '0.72rem', letterSpacing: '0.1em' }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                VIEW PROJECTS
+              </motion.button>
               <motion.a
-                key={label}
-                href={href}
+                href="https://drive.google.com/file/d/1VwNaH1t4zrD8TYgpoN7JIpu_ed5Bb0Pu/view"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-                className="w-10 h-10 sm:w-12 sm:h-12 bg-card/50 border border-border/50 rounded-lg flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-all duration-300 backdrop-blur-sm"
-                aria-label={label}
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="btn-terminal flex items-center gap-2 text-xs"
+                style={{ padding: '0.6rem 1.4rem', fontSize: '0.72rem', letterSpacing: '0.08em' }}
               >
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                RESUME.PDF
               </motion.a>
-            ))}
-          </motion.div>
-
-          {/* Scroll Down */}
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.4 }}
-            onClick={scrollToAbout}
-            className="group cursor-pointer"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center text-muted-foreground group-hover:text-primary transition-colors duration-300"
-            >
-              <span className="text-xs sm:text-sm font-medium mb-2">
-                Scroll Down
-              </span>
-              <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.div>
-          </motion.button>
-        </motion.div>
+
+            {/* Social links */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1.0 }}
+              className="flex items-center gap-2.5"
+            >
+              {[
+                { icon: Github, href: 'https://github.com/chaudhariGaurav07', label: 'GitHub' },
+                { icon: Linkedin, href: 'https://www.linkedin.com/in/gaurav-chaudhari-b20176227/', label: 'LinkedIn' },
+                { icon: Mail, href: 'mailto:gauravchaudhari7717@example.com', label: 'Email' },
+              ].map(({ icon: Icon, href, label }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.15, y: -2 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label={label}
+                  className="w-9 h-9 rounded flex items-center justify-center transition-all duration-200"
+                  style={{
+                    color: 'rgba(0,245,255,0.55)',
+                    border: '1px solid rgba(0,245,255,0.18)',
+                    background: 'rgba(0,245,255,0.04)',
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = '#00F5FF';
+                    el.style.borderColor = 'rgba(0,245,255,0.5)';
+                    el.style.boxShadow = '0 0 12px rgba(0,245,255,0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = 'rgba(0,245,255,0.55)';
+                    el.style.borderColor = 'rgba(0,245,255,0.18)';
+                    el.style.boxShadow = 'none';
+                  }}
+                >
+                  <Icon className="w-4 h-4" />
+                </motion.a>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ── RIGHT COLUMN: Terminal Window ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="hidden lg:block"
+          >
+            <div className="terminal-window">
+              {/* Title bar */}
+              <div className="terminal-titlebar">
+                <span className="terminal-dot" style={{ background: '#FF5F57' }} />
+                <span className="terminal-dot" style={{ background: '#FFBD2E' }} />
+                <span className="terminal-dot" style={{ background: '#28CA41' }} />
+                <span className="font-mono text-xs ml-4" style={{ color: 'rgba(0,245,255,0.35)' }}>
+                  gaurav@portfolio — bash — 80×24
+                </span>
+              </div>
+
+              {/* Terminal body */}
+              <div className="p-5 font-mono text-sm" style={{ minHeight: '240px', lineHeight: '1.8' }}>
+                {terminalLines.slice(0, visibleLines).map((line) => (
+                  <motion.div
+                    key={line.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    {line.type === 'prompt' && (
+                      <div className="flex items-center gap-1 mb-1">
+                        <span style={{ color: '#00FF41' }}>user@portfolio</span>
+                        <span style={{ color: 'rgba(0,245,255,0.4)' }}>:~</span>
+                        <span style={{ color: '#00FF41' }}>$</span>
+                        <span className="ml-1" style={{ color: '#00F5FF' }}>{line.cmd}</span>
+                      </div>
+                    )}
+                    {line.type === 'output' && (
+                      <div className="mb-1 pl-2" style={{ color: 'rgba(0,245,255,0.65)' }}>
+                        {line.text}
+                      </div>
+                    )}
+                    {line.type === 'output-tags' && (
+                      <div className="mb-1 pl-2 flex flex-wrap gap-2">
+                        {line.tags?.map((tag, i) => (
+                          <span
+                            key={i}
+                            className="px-1.5 py-0.5 rounded text-xs"
+                            style={{
+                              background: 'rgba(0,245,255,0.1)',
+                              border: '1px solid rgba(0,245,255,0.3)',
+                              color: '#00F5FF',
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {line.type === 'prompt-cursor' && (
+                      <div className="flex items-center gap-1">
+                        <span style={{ color: '#00FF41' }}>user@portfolio</span>
+                        <span style={{ color: 'rgba(0,245,255,0.4)' }}>:~</span>
+                        <span style={{ color: '#00FF41' }}>$</span>
+                        <span className="terminal-cursor ml-1" />
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Tech tags below terminal */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1.5 }}
+              className="mt-4 flex flex-wrap gap-2"
+            >
+              {['REACT', 'TYPESCRIPT', 'NODE.JS', 'MONGODB'].map((t) => (
+                <span key={t} className="tag-cyan text-xs font-mono">{t}</span>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          onClick={() => document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 cursor-pointer"
+        >
+          <span className="font-mono text-xs tracking-widest" style={{ color: 'rgba(0,245,255,0.3)', letterSpacing: '0.15em' }}>
+            SCROLL_DOWN
+          </span>
+          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity }}>
+            <ChevronDown className="w-5 h-5" style={{ color: 'rgba(0,245,255,0.4)' }} />
+          </motion.div>
+        </motion.button>
       </div>
     </section>
   );

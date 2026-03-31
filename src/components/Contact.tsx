@@ -1,19 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Send,
-  Mail,
-  MapPin,
-  Phone,
-  AlertCircle,
-} from "lucide-react";
+import { Send, Mail, MapPin, Phone, AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { contactAPI } from "@/lib/api";
 import { ContactForm as ContactFormType } from "@/types";
@@ -25,171 +15,146 @@ const contactSchema = z.object({
 });
 
 const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "gauravchaudhari7717@example.com",
-    href: "mailto:gauravchaudhari7717@example.com",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "India",
-    href: null,
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+91 866 844 9187",
-    href: "tel:+918668449187",
-  },
+  { icon: Mail, label: "SRC_MAIL", value: "gauravchaudhari7717@example.com", href: "mailto:gauravchaudhari7717@example.com", color: "#00F5FF" },
+  { icon: MapPin, label: "SRC_NODE", value: "India", href: null, color: "#00FF41" },
+  { icon: Phone, label: "SRC_PORT", value: "+91 866 844 9187", href: "tel:+918668449187", color: "#0786D8" },
 ];
 
 const platforms = [
-  { name: "GitHub", url: "https://github.com/chaudhariGaurav07" },
-  {
-    name: "LinkedIn",
-    url: "https://www.linkedin.com/in/gaurav-chaudhari-b20176227/",
-  },
-  { name: "Twitter", url: "https://x.com/GauravChau364" },
+  { name: "GITHUB", url: "https://github.com/chaudhariGaurav07", color: "#E8EDF3" },
+  { name: "LINKEDIN", url: "https://www.linkedin.com/in/gaurav-chaudhari-b20176227/", color: "#0786D8" },
+  { name: "TWITTER", url: "https://x.com/GauravChau364", color: "#00F5FF" },
 ];
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<ContactFormType>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormType>({
     resolver: zodResolver(contactSchema),
   });
 
   const onSubmit = async (data: ContactFormType) => {
     setIsSubmitting(true);
-
     try {
       const result = await contactAPI.send(data);
-
       if (result.success) {
-        toast({
-          title: "Message Sent!",
-          description: result.message,
-          variant: "default",
-        });
+        toast({ title: "Packet Sent!", description: result.message });
         reset();
       } else {
         throw new Error(result.message);
       }
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
-      });
+      toast({ title: "Transmission Error", description: "Failed to send. Please retry.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="contact" className="section-padding bg-muted/30">
-      <div className="container-custom">
-        {/* Heading */}
+    <section id="contact" className="section-padding grid-bg relative overflow-hidden">
+      {/* @ symbol decorative */}
+      <div className="absolute right-8 top-1/2 -translate-y-1/2 text-[20rem] font-bold select-none pointer-events-none hidden lg:block"
+        style={{ color: 'rgba(0,245,255,0.025)', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1 }}>
+        @
+      </div>
+
+      <div className="container-custom relative z-10">
+
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-10 sm:mb-16 px-4"
+          transition={{ duration: 0.7 }}
+          className="mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-            <span className="gradient-text">Get In Touch</span>
-          </h2>
-          <p className="text-base sm:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Let's discuss your next project or just say hello!
+          <p className="font-mono text-xs tracking-widest mb-2" style={{ color: 'rgba(0,245,255,0.5)' }}>
+            nc -l 8080 -k
           </p>
+          <h2 className="font-orbitron font-bold text-3xl md:text-4xl tracking-wider" style={{ color: '#E8EDF3' }}>
+            INITIATE_<span style={{ color: '#00F5FF' }}>HANDSHAKE</span>
+          </h2>
+          <p className="font-mono text-sm mt-2" style={{ color: 'rgba(232,237,243,0.4)' }}>
+            Send a packet to establish a persistent connection. Response latency: typically {'<'} 24h.
+          </p>
+          <div className="h-px mt-3 w-36" style={{ background: 'linear-gradient(90deg, #00F5FF, transparent)' }} />
         </motion.div>
 
-        {/* Layout */}
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-start">
-          {/* Contact Info */}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+
+          {/* Left: Info */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6 sm:space-y-8 px-4"
+            transition={{ duration: 0.7 }}
+            className="space-y-6"
           >
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
-                Let's Connect
-              </h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                I'm always open to discussing new opportunities, interesting
-                projects, or just having a conversation about technology and
-                development.
-              </p>
-            </div>
-
-            {/* Info Cards */}
-            <div className="space-y-4 sm:space-y-6">
-              {contactInfo.map((info, index) => (
-                <motion.div
-                  key={info.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
+            {/* Contact info items */}
+            {contactInfo.map((info, i) => (
+              <motion.div
+                key={info.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <div className="flex items-center gap-4 p-4 rounded-lg transition-all duration-200 group"
+                  style={{ background: 'rgba(0,245,255,0.03)', border: '1px solid rgba(0,245,255,0.1)' }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = `${info.color}40`;
+                    (e.currentTarget as HTMLElement).style.boxShadow = `0 0 15px ${info.color}15`;
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,245,255,0.1)';
+                    (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                  }}
                 >
-                  <div className="flex items-center space-x-4 p-3 sm:p-4 card-3d group-hover:shadow-3d-hover transition-all duration-300">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                      <info.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground text-sm sm:text-base">
-                        {info.label}
-                      </h4>
-                      {info.href ? (
-                        <a
-                          href={info.href}
-                          className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors break-words"
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <p className="text-xs sm:text-sm text-muted-foreground">
-                          {info.value}
-                        </p>
-                      )}
-                    </div>
+                  <div className="w-10 h-10 rounded flex items-center justify-center flex-shrink-0"
+                    style={{ background: `${info.color}15`, border: `1px solid ${info.color}30` }}>
+                    <info.icon className="w-4 h-4" style={{ color: info.color }} />
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                  <div>
+                    <p className="font-mono text-xs mb-1" style={{ color: 'rgba(0,245,255,0.4)' }}>{info.label}</p>
+                    {info.href ? (
+                      <a href={info.href} className="font-mono text-sm transition-colors duration-200"
+                        style={{ color: 'rgba(232,237,243,0.7)' }}
+                        onMouseEnter={e => (e.currentTarget.style.color = info.color)}
+                        onMouseLeave={e => (e.currentTarget.style.color = 'rgba(232,237,243,0.7)')}>
+                        {info.value}
+                      </a>
+                    ) : (
+                      <p className="font-mono text-sm" style={{ color: 'rgba(232,237,243,0.7)' }}>{info.value}</p>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
 
-            {/* Social Links */}
+            {/* Social links */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="p-4 sm:p-6 card-3d"
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="p-4 rounded-lg"
+              style={{ background: 'rgba(0,245,255,0.03)', border: '1px solid rgba(0,245,255,0.1)' }}
             >
-              <h4 className="font-semibold mb-3 sm:mb-4">Follow Me</h4>
-              <div className="flex flex-wrap gap-2 sm:gap-4">
-                {platforms.map(({ name, url }) => (
+              <p className="font-mono text-xs mb-3" style={{ color: 'rgba(0,245,255,0.4)' }}>OPEN_CHANNELS</p>
+              <div className="flex flex-wrap gap-2">
+                {platforms.map(({ name, url, color }) => (
                   <motion.a
                     key={name}
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 text-xs sm:text-sm font-medium"
+                    whileTap={{ scale: 0.97 }}
+                    className="px-3 py-1.5 rounded font-mono text-xs font-semibold transition-all duration-200"
+                    style={{ color, background: `${color}10`, border: `1px solid ${color}30` }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = `0 0 12px ${color}30`}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = 'none'}
                   >
                     {name}
                   </motion.a>
@@ -198,99 +163,129 @@ export default function Contact() {
             </motion.div>
           </motion.div>
 
-          {/* Contact Form */}
+          {/* Right: Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="px-4"
+            transition={{ duration: 0.7 }}
           >
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="card-3d p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6"
+              className="p-6 rounded-lg space-y-6"
+              style={{
+                background: 'rgba(13,17,23,0.8)',
+                border: '1px solid rgba(0,245,255,0.15)',
+                boxShadow: '0 0 40px rgba(0,245,255,0.05)'
+              }}
             >
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-                Send Message
-              </h3>
-
-              {/* Name */}
-              <div className="space-y-1 sm:space-y-2">
-                <Label htmlFor="name" className="text-xs sm:text-sm font-medium">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  {...register("name")}
-                  placeholder="Your full name"
-                  className="bg-input/50 border-border/50 focus:border-primary text-sm sm:text-base"
-                />
+              {/* SRC_NAME */}
+              <div className="space-y-2">
+                <label className="font-mono text-xs" style={{ color: 'rgba(0,245,255,0.5)' }}>
+                  SRC_NAME
+                </label>
+                <div className="relative">
+                  <span className="absolute left-0 top-2 font-mono text-xs" style={{ color: '#00FF41' }}>{'>'}</span>
+                  <input
+                    {...register("name")}
+                    placeholder="identity.val"
+                    className="w-full bg-transparent font-mono text-sm outline-none pl-4 py-2"
+                    style={{
+                      color: '#00F5FF',
+                      borderBottom: '1px solid rgba(0,245,255,0.2)',
+                    }}
+                    onFocus={e => (e.currentTarget.style.borderColor = '#00F5FF')}
+                    onBlur={e => (e.currentTarget.style.borderColor = 'rgba(0,245,255,0.2)')}
+                  />
+                </div>
                 {errors.name && (
-                  <div className="flex items-center space-x-1 text-destructive text-xs sm:text-sm">
-                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>{errors.name.message}</span>
+                  <div className="flex items-center gap-1 font-mono text-xs" style={{ color: '#FF5F57' }}>
+                    <AlertCircle className="w-3 h-3" />{errors.name.message}
                   </div>
                 )}
               </div>
 
-              {/* Email */}
-              <div className="space-y-1 sm:space-y-2">
-                <Label htmlFor="email" className="text-xs sm:text-sm font-medium">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  {...register("email")}
-                  placeholder="your.email@example.com"
-                  className="bg-input/50 border-border/50 focus:border-primary text-sm sm:text-base"
-                />
+              {/* SRC_EMAIL */}
+              <div className="space-y-2">
+                <label className="font-mono text-xs" style={{ color: 'rgba(0,245,255,0.5)' }}>
+                  SRC_ADDR
+                </label>
+                <div className="relative">
+                  <span className="absolute left-0 top-2 font-mono text-xs" style={{ color: '#00FF41' }}>{'>'}</span>
+                  <input
+                    type="email"
+                    {...register("email")}
+                    placeholder="remote.addr"
+                    className="w-full bg-transparent font-mono text-sm outline-none pl-4 py-2"
+                    style={{
+                      color: '#00F5FF',
+                      borderBottom: '1px solid rgba(0,245,255,0.2)',
+                    }}
+                    onFocus={e => (e.currentTarget.style.borderColor = '#00F5FF')}
+                    onBlur={e => (e.currentTarget.style.borderColor = 'rgba(0,245,255,0.2)')}
+                  />
+                </div>
                 {errors.email && (
-                  <div className="flex items-center space-x-1 text-destructive text-xs sm:text-sm">
-                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>{errors.email.message}</span>
+                  <div className="flex items-center gap-1 font-mono text-xs" style={{ color: '#FF5F57' }}>
+                    <AlertCircle className="w-3 h-3" />{errors.email.message}
                   </div>
                 )}
               </div>
 
-              {/* Message */}
-              <div className="space-y-1 sm:space-y-2">
-                <Label htmlFor="message" className="text-xs sm:text-sm font-medium">
-                  Message
-                </Label>
-                <Textarea
-                  id="message"
-                  {...register("message")}
-                  placeholder="Tell me about your project or just say hello..."
-                  rows={4}
-                  className="bg-input/50 border-border/50 focus:border-primary resize-none text-sm sm:text-base"
-                />
+              {/* PAYLOAD */}
+              <div className="space-y-2">
+                <label className="font-mono text-xs" style={{ color: 'rgba(0,245,255,0.5)' }}>
+                  PAYLOAD
+                </label>
+                <div className="relative">
+                  <span className="absolute left-0 top-2 font-mono text-xs" style={{ color: '#00FF41' }}>{'>'}</span>
+                  <textarea
+                    {...register("message")}
+                    placeholder="enter message body..."
+                    rows={4}
+                    className="w-full bg-transparent font-mono text-sm outline-none pl-4 py-2 resize-none"
+                    style={{
+                      color: '#00F5FF',
+                      borderBottom: '1px solid rgba(0,245,255,0.2)',
+                    }}
+                    onFocus={e => (e.currentTarget.style.borderColor = '#00F5FF')}
+                    onBlur={e => (e.currentTarget.style.borderColor = 'rgba(0,245,255,0.2)')}
+                  />
+                </div>
                 {errors.message && (
-                  <div className="flex items-center space-x-1 text-destructive text-xs sm:text-sm">
-                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>{errors.message.message}</span>
+                  <div className="flex items-center gap-1 font-mono text-xs" style={{ color: '#FF5F57' }}>
+                    <AlertCircle className="w-3 h-3" />{errors.message.message}
                   </div>
                 )}
               </div>
 
               {/* Submit */}
-              <Button
+              <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full btn-3d py-2 sm:py-3 text-sm sm:text-lg"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 rounded font-mono font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200"
+                style={{
+                  background: isSubmitting ? 'rgba(0,245,255,0.1)' : 'linear-gradient(135deg, #00F5FF, #00FF41)',
+                  color: isSubmitting ? '#00F5FF' : '#0D1117',
+                  border: isSubmitting ? '1px solid rgba(0,245,255,0.3)' : 'none',
+                  boxShadow: isSubmitting ? 'none' : '0 0 20px rgba(0,245,255,0.3)',
+                  letterSpacing: '0.08em'
+                }}
               >
                 {isSubmitting ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="animate-spin w-3 h-3 sm:w-4 sm:h-4 border-2 border-current border-t-transparent rounded-full" />
-                    <span>Sending...</span>
-                  </div>
+                  <>
+                    <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                    TRANSMITTING...
+                  </>
                 ) : (
-                  <div className="flex items-center space-x-2">
-                    <Send className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span>Send Message</span>
-                  </div>
+                  <>
+                    <Send className="w-4 h-4" />
+                    ▶ EXEC_SEND
+                  </>
                 )}
-              </Button>
+              </motion.button>
             </form>
           </motion.div>
         </div>

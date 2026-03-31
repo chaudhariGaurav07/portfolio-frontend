@@ -1,71 +1,77 @@
 import { motion } from "framer-motion";
-import { Heart, Code2, Github, Linkedin, Mail, ArrowUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Github, Linkedin, Mail, ArrowUp, Terminal } from "lucide-react";
 
 const socialLinks = [
-  { icon: Github, href: "https://github.com/chaudhariGaurav07", label: "GitHub" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/gaurav-chaudhari-b20176227/", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:gauravchaudhari7717@example.com", label: "Email" },
+  { icon: Github, href: "https://github.com/chaudhariGaurav07", label: "GITHUB" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/gaurav-chaudhari-b20176227/", label: "LINKEDIN" },
+  { icon: Mail, href: "mailto:gauravchaudhari7717@example.com", label: "EMAIL" },
 ];
 
 const quickLinks = [
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Blog", href: "#blog" },
-  { label: "Contact", href: "#contact" },
+  { label: "ABOUT", href: "#about" },
+  { label: "EXPERIENCE", href: "#experience" },
+  { label: "PROJECTS", href: "#projects" },
+  { label: "BLOG", href: "#blog" },
+  { label: "CONTACT", href: "#contact" },
 ];
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <footer className="bg-card/50 border-t border-border/50 backdrop-blur-sm">
-      <div className="container-custom px-4 py-8 sm:py-12">
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-8">
-          {/* Brand Section */}
+    <footer style={{ background: 'rgba(9,12,16,0.95)', borderTop: '1px solid rgba(0,245,255,0.08)' }}>
+      <div className="container-custom px-4 py-10">
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
+
+          {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="space-y-3 sm:space-y-4"
+            className="space-y-4"
           >
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <Code2 className="w-5 h-5 text-primary-foreground" />
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded flex items-center justify-center"
+                style={{ background: 'rgba(0,245,255,0.1)', border: '1px solid rgba(0,245,255,0.25)' }}>
+                <Terminal className="w-4 h-4" style={{ color: '#00F5FF' }} />
               </div>
-              <span className="text-base sm:text-lg font-bold gradient-text">
-                Gaurav Chaudhari
+              <span className="font-mono text-sm font-semibold" style={{ color: '#00F5FF' }}>
+                user@portfolio<span style={{ color: '#00FF41' }}>:~$</span>
               </span>
             </div>
-            <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
-              Full Stack Developer with a passion for delivering high-impact
-              digital experiences through clean, efficient code and thoughtful
-              design.
+            <p className="text-xs leading-relaxed" style={{ color: 'rgba(232,237,243,0.4)', fontFamily: 'Inter, sans-serif' }}>
+              Full Stack Developer with a passion for delivering high-impact digital experiences through clean, efficient code and thoughtful design.
             </p>
-            <div className="flex space-x-3 sm:space-x-4">
+            <div className="flex gap-3">
               {socialLinks.map(({ icon: Icon, href, label }) => (
                 <motion.a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.9 }}
-                  className="w-9 h-9 sm:w-10 sm:h-10 bg-muted/50 hover:bg-primary border border-border/50 hover:border-primary rounded-lg flex items-center justify-center text-muted-foreground hover:text-primary-foreground transition-all duration-300"
+                  className="w-9 h-9 rounded flex items-center justify-center transition-all duration-200"
+                  style={{ color: 'rgba(0,245,255,0.5)', border: '1px solid rgba(0,245,255,0.15)', background: 'rgba(0,245,255,0.03)' }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = '#00F5FF';
+                    el.style.borderColor = 'rgba(0,245,255,0.4)';
+                    el.style.boxShadow = '0 0 12px rgba(0,245,255,0.25)';
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = 'rgba(0,245,255,0.5)';
+                    el.style.borderColor = 'rgba(0,245,255,0.15)';
+                    el.style.boxShadow = 'none';
+                  }}
                   aria-label={label}
                 >
-                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <Icon className="w-4 h-4" />
                 </motion.a>
               ))}
             </div>
@@ -77,79 +83,84 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-3 sm:space-y-4"
+            className="space-y-4"
           >
-            <h3 className="text-base sm:text-lg font-semibold text-foreground">
-              Quick Links
+            <h3 className="font-mono text-xs tracking-widest" style={{ color: 'rgba(0,245,255,0.5)' }}>
+              QUICK_LINKS
             </h3>
-            <nav className="flex flex-col space-y-1.5 sm:space-y-2">
+            <nav className="flex flex-col gap-2">
               {quickLinks.map((link) => (
                 <motion.button
                   key={link.label}
                   onClick={() => scrollToSection(link.href)}
-                  whileHover={{ x: 5 }}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200 text-xs sm:text-sm text-left"
+                  whileHover={{ x: 6 }}
+                  className="font-mono text-xs text-left transition-colors duration-200"
+                  style={{ color: 'rgba(232,237,243,0.4)' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#00F5FF')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(232,237,243,0.4)')}
                 >
-                  {link.label}
+                  <span style={{ color: '#00FF41', marginRight: '6px' }}>{'>'}</span>{link.label}
                 </motion.button>
               ))}
             </nav>
           </motion.div>
 
-          {/* Tech Stack */}
+          {/* Built With */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-3 sm:space-y-4"
+            className="space-y-4"
           >
-            <h3 className="text-base sm:text-lg font-semibold text-foreground">
-              Built With
+            <h3 className="font-mono text-xs tracking-widest" style={{ color: 'rgba(0,245,255,0.5)' }}>
+              BUILT_WITH
             </h3>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              {[
-                "React",
-                "TypeScript",
-                "Tailwind CSS",
-                "Framer Motion",
-                "Vite",
-              ].map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-primary/10 text-primary rounded-full text-[11px] sm:text-xs font-medium border border-primary/20"
-                >
-                  {tech}
-                </span>
+            <div className="flex flex-wrap gap-1.5">
+              {["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite"].map((tech) => (
+                <span key={tech} className="tag-cyan" style={{ fontSize: '0.65rem' }}>{tech}</span>
               ))}
             </div>
-            <p className="text-muted-foreground text-xs sm:text-sm">
-              This portfolio is open source and available on GitHub.
+            <p className="font-mono text-xs" style={{ color: 'rgba(232,237,243,0.3)' }}>
+              // This portfolio is open source on GitHub.
             </p>
           </motion.div>
         </div>
 
-        {/* Bottom Section */}
+        {/* Bottom bar */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="pt-6 sm:pt-8 border-t border-border/50 flex justify-center"
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex items-center justify-between pt-6"
+          style={{ borderTop: '1px solid rgba(0,245,255,0.06)' }}
         >
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            <p className="text-xs sm:text-sm text-muted-foreground">
-              © {new Date().getFullYear()} All rights reserved.
-            </p>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={scrollToTop}
-              className="w-9 h-9 sm:w-10 sm:h-10 bg-muted/50 hover:bg-primary border border-border/50 hover:border-primary text-muted-foreground hover:text-primary-foreground transition-all duration-300"
-            >
-              <ArrowUp className="w-4 h-4" />
-            </Button>
-          </div>
+          <p className="font-mono text-xs" style={{ color: 'rgba(232,237,243,0.25)' }}>
+            <span style={{ color: 'rgba(0,245,255,0.3)' }}>// </span>
+            © {new Date().getFullYear()} Terminal_Portfolio_v1.0 — Gaurav Chaudhari
+          </p>
+          <motion.button
+            onClick={scrollToTop}
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-9 h-9 rounded flex items-center justify-center transition-all duration-200"
+            style={{ color: 'rgba(0,245,255,0.5)', border: '1px solid rgba(0,245,255,0.15)', background: 'rgba(0,245,255,0.03)' }}
+            onMouseEnter={e => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.color = '#00F5FF';
+              el.style.borderColor = 'rgba(0,245,255,0.4)';
+              el.style.boxShadow = '0 0 12px rgba(0,245,255,0.25)';
+            }}
+            onMouseLeave={e => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.color = 'rgba(0,245,255,0.5)';
+              el.style.borderColor = 'rgba(0,245,255,0.15)';
+              el.style.boxShadow = 'none';
+            }}
+          >
+            <ArrowUp className="w-4 h-4" />
+          </motion.button>
         </motion.div>
       </div>
     </footer>
