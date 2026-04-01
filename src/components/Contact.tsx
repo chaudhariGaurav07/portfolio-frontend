@@ -65,8 +65,8 @@ export default function Contact() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
           className="mb-12"
         >
           <p className="font-mono text-xs tracking-widest mb-2" style={{ color: 'rgba(0,245,255,0.5)' }}>
@@ -87,8 +87,8 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
             className="space-y-6"
           >
             {/* Contact info items */}
@@ -97,8 +97,8 @@ export default function Contact() {
                 key={info.label}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+                transition={{ duration: 0.85, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div className="flex items-center gap-4 p-4 rounded-lg transition-all duration-200 group"
                   style={{ background: 'rgba(0,245,255,0.03)', border: '1px solid rgba(0,245,255,0.1)' }}
@@ -136,8 +136,8 @@ export default function Contact() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+              transition={{ duration: 1.0, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="p-4 rounded-lg"
               style={{ background: 'rgba(0,245,255,0.03)', border: '1px solid rgba(0,245,255,0.1)' }}
             >
@@ -167,8 +167,8 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
           >
             <form
               onSubmit={handleSubmit(onSubmit)}

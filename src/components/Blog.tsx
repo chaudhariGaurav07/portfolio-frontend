@@ -77,8 +77,8 @@ export default function Blog() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
             className="mb-12"
           >
             <p className="font-mono text-xs tracking-widest mb-2" style={{ color: 'rgba(0,245,255,0.5)' }}>
@@ -94,8 +94,8 @@ export default function Blog() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
           >
             <div
               className="overflow-hidden"
@@ -108,9 +108,11 @@ export default function Blog() {
                 className="flex gap-4 blog-marquee-track"
                 style={{ width: 'max-content' }}
               >
-                {marqueeBlogs.map((blog, index) => (
+                {marqueeBlogs.map((blog, index) => {
+                  const cardKey = `blog-${blog._id}-${index}`;
+                  return (
                   <a
-                    key={`blog-${blog._id}-${index}`}
+                    key={cardKey}
                     href={blog.externalLink}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -118,21 +120,27 @@ export default function Blog() {
                     style={{ width: '300px' }}
                   >
                     <div
-                      className="h-full flex flex-col rounded-lg overflow-hidden transition-all duration-300"
+                      className="h-full flex flex-col rounded-lg overflow-hidden transition-all duration-500"
                       style={{
                         background: 'rgba(13,17,23,0.85)',
                         border: '1px solid rgba(0,245,255,0.12)',
+                        /* subtle dim by default — torch lifts it on hover */
+                        filter: 'brightness(0.55) saturate(0.6)',
+                        boxShadow: 'inset 0 0 24px rgba(0,0,0,0.5)',
+                        transform: 'translateY(0)',
                       }}
                       onMouseEnter={e => {
                         const el = e.currentTarget as HTMLElement;
-                        el.style.borderColor = 'rgba(0,245,255,0.4)';
-                        el.style.boxShadow = '0 0 20px rgba(0,245,255,0.15)';
-                        el.style.transform = 'translateY(-4px)';
+                        el.style.filter = 'brightness(1) saturate(1)';
+                        el.style.borderColor = 'rgba(0,245,255,0.5)';
+                        el.style.boxShadow = '0 0 28px rgba(0,245,255,0.25), 0 8px 32px rgba(0,0,0,0.5)';
+                        el.style.transform = 'translateY(-5px)';
                       }}
                       onMouseLeave={e => {
                         const el = e.currentTarget as HTMLElement;
+                        el.style.filter = 'brightness(0.55) saturate(0.6)';
                         el.style.borderColor = 'rgba(0,245,255,0.12)';
-                        el.style.boxShadow = 'none';
+                        el.style.boxShadow = 'inset 0 0 24px rgba(0,0,0,0.5)';
                         el.style.transform = 'translateY(0)';
                       }}
                     >
@@ -182,7 +190,8 @@ export default function Blog() {
                       </div>
                     </div>
                   </a>
-                ))}
+                );
+                })}
               </div>
             </div>
           </motion.div>
@@ -191,8 +200,8 @@ export default function Blog() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+            transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="text-center mt-10"
           >
             <motion.a
@@ -244,7 +253,7 @@ export default function Blog() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
                 className="prose prose-invert max-w-none mt-6"
                 dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
               />

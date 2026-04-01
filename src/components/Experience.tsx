@@ -57,8 +57,8 @@ export default function Experience() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16"
         >
           <p className="font-mono text-xs tracking-widest mb-2" style={{ color: 'rgba(0,245,255,0.5)' }}>
@@ -80,8 +80,8 @@ export default function Experience() {
                 key={exp.id}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.7, delay: index * 0.1 }}
+                viewport={{ once: false, margin: "-100px", amount: 0.1 }}
+                transition={{ duration: 0.85, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
                 className={`relative flex flex-col md:items-center ${
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}

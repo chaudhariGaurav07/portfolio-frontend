@@ -62,8 +62,8 @@ export default function Projects() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-14"
         >
           <div>
@@ -90,8 +90,8 @@ export default function Projects() {
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
           className="relative"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
@@ -216,8 +216,8 @@ export default function Projects() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mt-12"
         >
           <motion.a

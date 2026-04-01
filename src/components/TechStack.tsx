@@ -88,8 +88,8 @@ export default function TechStack() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
           className="mb-20"
         >
           {/* Section label */}
@@ -149,8 +149,8 @@ export default function TechStack() {
                   key={item.label}
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+                  transition={{ duration: 0.85, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   className="rounded-lg p-4"
                   style={{
                     background: "rgba(0,245,255,0.03)",
@@ -173,8 +173,8 @@ export default function TechStack() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="mb-6">
             <p className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(0,245,255,0.5)" }}>
