@@ -528,4 +528,61 @@
     box-shadow: var(--glow-cyan);
     transform: translateY(-4px);
   }
+
+  /* ====================================================== */
+  /* 3D HACKER KEYBOARD                                     */
+  /* ====================================================== */
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .key-3d {
+    @apply relative flex items-center justify-center font-mono font-bold select-none cursor-pointer;
+    background: rgba(13, 17, 23, 0.9);
+    border: 1px solid rgba(0, 245, 255, 0.4);
+    border-radius: 6px;
+    box-shadow: 
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      0 6px 0 rgba(0, 150, 160, 0.3), 
+      0 10px 15px rgba(0,0,0,0.8);
+    color: rgba(0, 245, 255, 0.7);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+
+  .key-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .key-3d:hover {
+    color: #00F5FF;
+    border-color: #00F5FF;
+    box-shadow: 
+      inset 0 1px 0 rgba(255,255,255,0.2),
+      0 4px 0 rgba(0, 245, 255, 0.6), 
+      0 8px 20px rgba(0, 245, 255, 0.4);
+    transform: translateY(2px);
+  }
+
+  .key-3d.active, .key-3d:active {
+    box-shadow: 
+      inset 0 2px 5px rgba(0, 0, 0, 0.5),
+      0 0px 0 #00F5FF, 
+      0 0px 15px rgba(0, 255, 65, 0.6),
+      inset 0 0 10px rgba(0, 255, 65, 0.2);
+    transform: translateY(6px);
+    color: #00FF41;
+    border-color: #00FF41;
+    background: rgba(0, 255, 65, 0.05);
+  }
 }
