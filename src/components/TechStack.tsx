@@ -1,53 +1,45 @@
 import { motion } from "framer-motion";
 import { ComponentType, CSSProperties } from "react";
 import {
-  SiReact, SiTypescript, SiNextdotjs, SiTailwindcss, SiNodedotjs,
-  SiExpress, SiMongodb, SiAmazon, SiVercel, SiGit, SiGithub,
-  SiReactivex, SiFramer, SiFirebase, SiPython, SiDocker, SiPostgresql,
-  SiCplusplus, SiKubernetes, SiLinux, SiVuedotjs, SiGraphql, SiAmazonwebservices,
+  SiReact, SiTypescript, SiNextdotjs, SiNodedotjs, SiMongodb, SiGit, SiGithub,
+  SiPython, SiCplusplus, SiJavascript, SiPostman, SiUbuntu,
+  SiMysql, SiLeetcode, SiCodechef 
 } from "react-icons/si";
+import { FaJava, FaWindows } from "react-icons/fa";
 
-/* ────── ABOUT CARD DATA ────── */
 const aboutHighlights = [
-  { label: "STATUS", value: "Available for work", color: "#00FF41" },
-  { label: "LOCATION", value: "India", color: "#00F5FF" },
-  { label: "EXPERIENCE", value: "3+ years coding", color: "#00F5FF" },
-  { label: "FOCUS", value: "Full Stack + Open Source", color: "#0786D8" },
+  { label: "EDUCATION", value: "B.Tech CSE - Final Year", color: "#00FF41" },
+  { label: "INSTITUTE", value: "RCPIT, Shirpur", color: "#00F5FF" },
+  { label: "FOCUS", value: "Web, App Dev & SWE", color: "#0786D8" },
+  { label: "STATUS", value: "Exploring ML & New Tech", color: "#FF9900" },
 ];
 
-/* ────── TECH DATA (2 rows, opposing directions) ────── */
 type Tech = { name: string; icon: ComponentType<{ className?: string; style?: CSSProperties }>; color: string };
 
 const row1: Tech[] = [
   { name: "C", icon: SiCplusplus, color: "#A8B9CC" },
   { name: "C++", icon: SiCplusplus, color: "#00599C" },
-  { name: "TAILWIND", icon: SiTailwindcss, color: "#06B6D4" },
-  { name: "RUST", icon: SiReact, color: "#E8EDF3" },
-  { name: "REACT", icon: SiReact, color: "#61DAFB" },
+  { name: "JAVA", icon: FaJava, color: "#007396" },
+  { name: "JAVASCRIPT", icon: SiJavascript, color: "#F7DF1E" },
   { name: "TYPESCRIPT", icon: SiTypescript, color: "#3178C6" },
-  { name: "NEXT.JS", icon: SiNextdotjs, color: "#E8EDF3" },
-  { name: "NODE.JS", icon: SiNodedotjs, color: "#339933" },
-  { name: "EXPRESS", icon: SiExpress, color: "#E8EDF3" },
   { name: "PYTHON", icon: SiPython, color: "#3776AB" },
-  { name: "KUBERNETES", icon: SiKubernetes, color: "#326CE5" },
+  { name: "REACT", icon: SiReact, color: "#61DAFB" },
+  { name: "NODE.JS", icon: SiNodedotjs, color: "#339933" },
+  { name: "NEXT.JS", icon: SiNextdotjs, color: "#E8EDF3" },
 ];
 
 const row2: Tech[] = [
-  { name: "AWS", icon: SiAmazonwebservices, color: "#FF9900" },
-  { name: "LINUX", icon: SiLinux, color: "#FCC624" },
-  { name: "GRAPHQL", icon: SiGraphql, color: "#E10098" },
   { name: "MONGODB", icon: SiMongodb, color: "#47A248" },
-  { name: "POSTGRESQL", icon: SiPostgresql, color: "#336791" },
-  { name: "FIREBASE", icon: SiFirebase, color: "#FFCA28" },
-  { name: "VERCEL", icon: SiVercel, color: "#E8EDF3" },
-  { name: "DOCKER", icon: SiDocker, color: "#2496ED" },
-  { name: "SHELL", icon: SiLinux, color: "#4EAA25" },
-  { name: "NEXT.JS", icon: SiNextdotjs, color: "#E8EDF3" },
-  { name: "VUE", icon: SiVuedotjs, color: "#4FC08D" },
+  { name: "SQL", icon: SiMysql, color: "#4479A1" },
+  { name: "GIT", icon: SiGit, color: "#F05032" },
+  { name: "GITHUB", icon: SiGithub, color: "#E8EDF3" },
+  { name: "POSTMAN", icon: SiPostman, color: "#FF6C37" },
+  { name: "UBUNTU", icon: SiUbuntu, color: "#E95420" },
+  { name: "WINDOWS", icon: FaWindows, color: "#0078D6" },
 ];
 
-const doubled1: Tech[] = [...row1, ...row1];
-const doubled2: Tech[] = [...row2, ...row2];
+const doubled1: Tech[] = [...row1, ...row1, ...row1];
+const doubled2: Tech[] = [...row2, ...row2, ...row2];
 
 function TechPill({ name, icon: Icon, color }: Tech) {
   return (
@@ -107,18 +99,16 @@ export default function TechStack() {
                 className="text-2xl md:text-3xl font-bold mb-4 leading-snug"
                 style={{ color: "#E8EDF3", fontFamily: "Inter, sans-serif" }}
               >
-                Engineering solutions at the intersection of hardware and high-level software.
+                Final year B.Tech Computer Science and Engineering student at R. C. Patel Institute of Technology, Shirpur.
               </h2>
               <p
                 className="text-sm leading-relaxed mb-6"
                 style={{ color: "rgba(232,237,243,0.5)", fontFamily: "Inter, sans-serif" }}
               >
-                Specializing in low-latency systems and cloud-native architecture. I transform complex command-line
-                concepts into seamless user experiences. Currently focusing on React, TypeScript, Node.js and
-                distributed systems optimization.
+                Passionate about building innovative solutions and exploring new technologies, I focus on web development, app development, and software engineering. I also have a foundational knowledge of Machine Learning.
               </p>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 mb-6">
                 <motion.a
                   href="https://drive.google.com/file/d/1VwNaH1t4zrD8TYgpoN7JIpu_ed5Bb0Pu/view"
                   target="_blank"
@@ -130,15 +120,14 @@ export default function TechStack() {
                 >
                   ▶ RESUME.PDF
                 </motion.a>
-                <motion.button
-                  whileHover={{ scale: 1.04, y: -1 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => document.querySelector("#experience")?.scrollIntoView({ behavior: "smooth" })}
-                  className="btn-3d text-xs"
-                  style={{ padding: "0.5rem 1.25rem", fontSize: "0.72rem" }}
-                >
-                  VIEW_STACK
-                </motion.button>
+              </div>
+
+              {/* Profiles */}
+              <div className="flex items-center gap-3">
+                <p className="font-mono text-xs text-[#00F5FF]/70 mr-2">PROFILES:</p>
+                <a href="https://github.com/chaudhariGaurav07" target="_blank" rel="noreferrer" className="text-[#E8EDF3] hover:text-[#00F5FF] transition-colors"><SiGithub size={20} title="GitHub" /></a>
+                <a href="https://leetcode.com/u/_chaudharigaurav/" target="_blank" rel="noreferrer" className="text-[#FFA500] hover:text-[#00F5FF] transition-colors"><SiLeetcode size={20} title="LeetCode" /></a>
+                <a href="https://www.codechef.com/users/gaurav_7717" target="_blank" rel="noreferrer" className="text-[#5B4638] hover:text-[#00F5FF] transition-colors"><SiCodechef size={20} title="CodeChef" /></a>
               </div>
             </div>
 
@@ -151,7 +140,7 @@ export default function TechStack() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: false, amount: 0.15, margin: "-60px" }}
                   transition={{ duration: 0.85, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                  className="rounded-lg p-4"
+                  className="rounded-lg p-4 flex flex-col justify-center"
                   style={{
                     background: "rgba(0,245,255,0.03)",
                     border: "1px solid rgba(0,245,255,0.1)",
@@ -178,7 +167,7 @@ export default function TechStack() {
         >
           <div className="mb-6">
             <p className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(0,245,255,0.5)" }}>
-              TECH_STACK --list-all
+              TECH_SKILLS & TOOLS --list-all
             </p>
             <div className="h-px w-16 mt-1" style={{ background: "linear-gradient(90deg, #00FF41, transparent)" }} />
           </div>

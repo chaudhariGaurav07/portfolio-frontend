@@ -1,14 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, ExternalLink, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { projectsAPI } from '@/lib/api';
 import { Project } from '@/types';
+
+/* ── Filter pill categories ── */
+const FILTER_TAGS = ['All', 'React', 'Next.js', 'Node.js', 'React Native', 'MongoDB', 'TypeScript'] as const;
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string>('All');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -25,20 +29,33 @@ export default function Projects() {
     fetchProjects();
   }, []);
 
+  /* ── Filtered projects based on active tech filter ── */
+  const filtered = useMemo(() => {
+    if (activeFilter === 'All') return projects;
+    return projects.filter(p =>
+      p.techStack.some(t => t.toLowerCase().includes(activeFilter.toLowerCase()))
+    );
+  }, [projects, activeFilter]);
+
+  const handleFilterChange = useCallback((tag: string) => {
+    setActiveFilter(tag);
+    setActive(0); // reset carousel to first project
+  }, []);
+
   const next = useCallback(() => {
-    setActive(prev => (prev + 1) % projects.length);
-  }, [projects.length]);
+    setActive(prev => (prev + 1) % filtered.length);
+  }, [filtered.length]);
 
   const prev = useCallback(() => {
-    setActive(prev => (prev - 1 + projects.length) % projects.length);
-  }, [projects.length]);
+    setActive(prev => (prev - 1 + filtered.length) % filtered.length);
+  }, [filtered.length]);
 
   // Auto-advance
   useEffect(() => {
-    if (paused || projects.length === 0) return;
+    if (paused || filtered.length === 0) return;
     intervalRef.current = setInterval(next, 3200);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [next, paused, projects.length]);
+  }, [next, paused, filtered.length]);
 
   if (loading) {
     return (
@@ -64,7 +81,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.15, margin: "-60px" }}
           transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-14"
+          className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8"
         >
           <div>
             <p className="font-mono text-xs tracking-widest mb-2" style={{ color: 'rgba(0,245,255,0.5)' }}>
@@ -81,8 +98,50 @@ export default function Projects() {
             <span style={{ color: '#00FF41' }}>[</span>
             <span style={{ color: '#E8EDF3' }}>{String(active + 1).padStart(2, '0')}</span>
             <span>/</span>
-            <span>{String(projects.length).padStart(2, '0')}</span>
+            <span>{String(filtered.length).padStart(2, '0')}</span>
             <span style={{ color: '#00FF41' }}>]</span>
+          </div>
+        </motion.div>
+
+        {/* ── Tech Stack Filter ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-12"
+        >
+          <p className="font-mono text-[10px] tracking-widest mb-3" style={{ color: 'rgba(0,245,255,0.35)' }}>
+            FILTER --tech=
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {FILTER_TAGS.map((tag) => {
+              const isActive = activeFilter === tag;
+
+              return (
+                <motion.button
+                  key={tag}
+                  onClick={() => handleFilterChange(tag)}
+                  whileHover={{ scale: 1.05, y: -1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="font-mono text-xs px-4 py-2 rounded-md transition-all duration-300"
+                  style={{
+                    background: isActive
+                      ? 'linear-gradient(135deg, rgba(0,245,255,0.15), rgba(0,255,65,0.1))'
+                      : 'rgba(13,17,23,0.7)',
+                    border: isActive
+                      ? '1px solid rgba(0,245,255,0.5)'
+                      : '1px solid rgba(0,245,255,0.12)',
+                    color: isActive ? '#00F5FF' : 'rgba(232,237,243,0.5)',
+                    boxShadow: isActive
+                      ? '0 0 16px rgba(0,245,255,0.2), inset 0 0 12px rgba(0,245,255,0.05)'
+                      : 'none',
+                  }}
+                >
+                  {tag}
+                </motion.button>
+              );
+            })}
           </div>
         </motion.div>
 
@@ -96,120 +155,136 @@ export default function Projects() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {/* 3D Viewport */}
-          <div
-            className="relative mx-auto overflow-visible"
-            style={{ height: '440px', perspective: '1200px', perspectiveOrigin: '50% 40%' }}
-          >
-            {projects.map((project, i) => {
-              const offset = i - active;
-              // Only render visible range
-              if (Math.abs(offset) > 2) return null;
-
-              const absOff = Math.abs(offset);
-              const sign = offset < 0 ? -1 : offset > 0 ? 1 : 0;
-
-              // Position transforms
-              const translateX = sign * (absOff === 1 ? 340 : 600);
-              const translateZ = absOff === 0 ? 0 : absOff === 1 ? -150 : -280;
-              const rotateY = sign * (absOff === 1 ? 42 : 62);
-              const scale = absOff === 0 ? 1 : absOff === 1 ? 0.82 : 0.65;
-              const opacity = absOff === 0 ? 1 : absOff === 1 ? 0.7 : 0.35;
-              const zIndex = 10 - absOff;
-
-              return (
-                <motion.div
-                  key={project._id}
-                  animate={{
-                    translateX,
-                    translateZ,
-                    rotateY,
-                    scale,
-                    opacity,
-                  }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-                  style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    marginLeft: '-170px',
-                    marginTop: '-210px',
-                    width: '340px',
-                    height: '420px',
-                    zIndex,
-                    transformStyle: 'preserve-3d',
-                    cursor: offset !== 0 ? 'pointer' : 'default',
-                  }}
-                  onClick={() => offset !== 0 && setActive(i)}
-                  whileHover={offset !== 0 ? { opacity: opacity + 0.15 } : {}}
-                >
-                  <ProjectCard project={project} isActive={offset === 0} />
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Prev / Next controls */}
-          <div className="flex justify-center items-center gap-6 mt-8">
-            <motion.button
-              onClick={prev}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.92 }}
-              className="w-11 h-11 rounded-full flex items-center justify-center font-mono transition-all duration-200"
-              style={{ border: '1px solid rgba(0,245,255,0.3)', color: '#00F5FF', background: 'rgba(0,245,255,0.05)' }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = 'rgba(0,245,255,0.15)';
-                el.style.boxShadow = '0 0 16px rgba(0,245,255,0.3)';
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = 'rgba(0,245,255,0.05)';
-                el.style.boxShadow = 'none';
-              }}
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </motion.button>
-
-            {/* Dot indicators */}
-            <div className="flex items-center gap-2">
-              {projects.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className="transition-all duration-300 rounded-full"
-                  style={{
-                    width: i === active ? '24px' : '6px',
-                    height: '6px',
-                    background: i === active
-                      ? 'linear-gradient(90deg, #00F5FF, #00FF41)'
-                      : 'rgba(0,245,255,0.2)',
-                    boxShadow: i === active ? '0 0 8px rgba(0,245,255,0.6)' : 'none',
-                  }}
-                />
-              ))}
+          {filtered.length === 0 ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="font-mono text-sm" style={{ color: 'rgba(0,245,255,0.5)' }}>
+                <span style={{ color: '#00FF41' }}>{'>'}</span> no projects found for
+                <span style={{ color: '#00F5FF' }}> "{activeFilter}"</span>
+                <span className="terminal-cursor ml-1" />
+              </div>
             </div>
+          ) : (
+            <>
+              {/* 3D Viewport */}
+              <div
+                className="relative mx-auto overflow-visible"
+                style={{ height: '440px', perspective: '1200px', perspectiveOrigin: '50% 40%' }}
+              >
+                <AnimatePresence mode="popLayout">
+                  {filtered.map((project, i) => {
+                    const offset = i - active;
+                    // Only render visible range
+                    if (Math.abs(offset) > 2) return null;
 
-            <motion.button
-              onClick={next}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.92 }}
-              className="w-11 h-11 rounded-full flex items-center justify-center font-mono transition-all duration-200"
-              style={{ border: '1px solid rgba(0,245,255,0.3)', color: '#00F5FF', background: 'rgba(0,245,255,0.05)' }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = 'rgba(0,245,255,0.15)';
-                el.style.boxShadow = '0 0 16px rgba(0,245,255,0.3)';
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = 'rgba(0,245,255,0.05)';
-                el.style.boxShadow = 'none';
-              }}
-            >
-              <ChevronRight className="w-5 h-5" />
-            </motion.button>
-          </div>
+                    const absOff = Math.abs(offset);
+                    const sign = offset < 0 ? -1 : offset > 0 ? 1 : 0;
+
+                    // Position transforms
+                    const translateX = sign * (absOff === 1 ? 340 : 600);
+                    const translateZ = absOff === 0 ? 0 : absOff === 1 ? -150 : -280;
+                    const rotateY = sign * (absOff === 1 ? 42 : 62);
+                    const scale = absOff === 0 ? 1 : absOff === 1 ? 0.82 : 0.65;
+                    const opacity = absOff === 0 ? 1 : absOff === 1 ? 0.7 : 0.35;
+                    const zIndex = 10 - absOff;
+
+                    return (
+                      <motion.div
+                        key={project._id}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{
+                          translateX,
+                          translateZ,
+                          rotateY,
+                          scale,
+                          opacity,
+                        }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+                        style={{
+                          position: 'absolute',
+                          left: '50%',
+                          top: '50%',
+                          marginLeft: '-170px',
+                          marginTop: '-210px',
+                          width: '340px',
+                          height: '420px',
+                          zIndex,
+                          transformStyle: 'preserve-3d',
+                          cursor: offset !== 0 ? 'pointer' : 'default',
+                        }}
+                        onClick={() => offset !== 0 && setActive(i)}
+                        whileHover={offset !== 0 ? { opacity: opacity + 0.15 } : {}}
+                      >
+                        <ProjectCard project={project} isActive={offset === 0} />
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+
+              {/* Prev / Next controls */}
+              <div className="flex justify-center items-center gap-6 mt-8">
+                <motion.button
+                  onClick={prev}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.92 }}
+                  className="w-11 h-11 rounded-full flex items-center justify-center font-mono transition-all duration-200"
+                  style={{ border: '1px solid rgba(0,245,255,0.3)', color: '#00F5FF', background: 'rgba(0,245,255,0.05)' }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.background = 'rgba(0,245,255,0.15)';
+                    el.style.boxShadow = '0 0 16px rgba(0,245,255,0.3)';
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.background = 'rgba(0,245,255,0.05)';
+                    el.style.boxShadow = 'none';
+                  }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+
+                {/* Dot indicators */}
+                <div className="flex items-center gap-2">
+                  {filtered.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActive(i)}
+                      className="transition-all duration-300 rounded-full"
+                      style={{
+                        width: i === active ? '24px' : '6px',
+                        height: '6px',
+                        background: i === active
+                          ? 'linear-gradient(90deg, #00F5FF, #00FF41)'
+                          : 'rgba(0,245,255,0.2)',
+                        boxShadow: i === active ? '0 0 8px rgba(0,245,255,0.6)' : 'none',
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <motion.button
+                  onClick={next}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.92 }}
+                  className="w-11 h-11 rounded-full flex items-center justify-center font-mono transition-all duration-200"
+                  style={{ border: '1px solid rgba(0,245,255,0.3)', color: '#00F5FF', background: 'rgba(0,245,255,0.05)' }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.background = 'rgba(0,245,255,0.15)';
+                    el.style.boxShadow = '0 0 16px rgba(0,245,255,0.3)';
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.background = 'rgba(0,245,255,0.05)';
+                    el.style.boxShadow = 'none';
+                  }}
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </motion.button>
+              </div>
+            </>
+          )}
         </motion.div>
 
         {/* View All CTA */}

@@ -4,12 +4,24 @@ import { Calendar, MapPin } from "lucide-react";
 const experiences = [
   {
     id: "1",
+    company: "TagOwls",
+    position: "Software Developer Intern",
+    duration: "March 2026 – Present",
+    location: "Shirpur",
+    logo: "/assets/tagowls.png",
+    status: "active",
+    description:
+      "Work as software developer developing the Creator-commerce platform where creators shop, promote, and earn.",
+    technologies: ["Next.js", "TypeScript", "Stitch", "Git", "GitHub"],
+  },
+  {
+    id: "2",
     company: "GirlScript Summer of Code",
     position: "Contributor + Campus Ambassador",
-    duration: "Jul 2025 – Present",
+    duration: "Jul 2025 – Sep 2025",
     location: "Remote",
     logo: "/assets/gssoc.png",
-    status: "active",
+    status: "closed",
     description:
       "Built scalable full-stack features, fixed bugs, and improved documentation for open-source projects...",
     technologies: ["React", "Node.js", "TypeScript", "MongoDB", "Express.js", "Git", "GitHub"],
@@ -19,7 +31,7 @@ const experiences = [
     ],
   },
   {
-    id: "2",
+    id: "3",
     company: "Akatsuki Coding Club",
     position: "Core Team Member + Technical Team Member",
     duration: "Oct 2024 – Present",
@@ -35,7 +47,7 @@ const experiences = [
     ],
   },
   {
-    id: "3",
+    id: "4",
     company: "R3 System India Private Limited",
     position: "Data Analyst",
     duration: "Jun 2023 – Jul 2023",
