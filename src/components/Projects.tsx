@@ -33,7 +33,9 @@ export default function Projects() {
   const filtered = useMemo(() => {
     if (activeFilter === 'All') return projects;
     return projects.filter(p =>
-      p.techStack.some(t => t.toLowerCase().includes(activeFilter.toLowerCase()))
+      p.techStack
+        .flatMap(t => t.split(',').map(s => s.trim().toLowerCase()))
+        .some(t => t.includes(activeFilter.toLowerCase()))
     );
   }, [projects, activeFilter]);
 
@@ -393,7 +395,10 @@ function ProjectCard({ project, isActive }: { project: Project; isActive: boolea
 
         {/* Tech tags */}
         <div className="flex flex-wrap gap-1.5">
-          {project.techStack.slice(0, 4).map((tech) => (
+          {project.techStack
+            .flatMap(t => t.split(',').map(s => s.trim()).filter(Boolean))
+            .slice(0, 4)
+            .map((tech) => (
             <span
               key={tech}
               className="font-mono rounded px-2 py-0.5"
@@ -407,9 +412,9 @@ function ProjectCard({ project, isActive }: { project: Project; isActive: boolea
               {tech}
             </span>
           ))}
-          {project.techStack.length > 4 && (
+          {project.techStack.flatMap(t => t.split(',').map(s => s.trim()).filter(Boolean)).length > 4 && (
             <span className="font-mono text-xs" style={{ color: 'rgba(232,237,243,0.3)' }}>
-              +{project.techStack.length - 4}
+              +{project.techStack.flatMap(t => t.split(',').map(s => s.trim()).filter(Boolean)).length - 4}
             </span>
           )}
         </div>
